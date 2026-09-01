@@ -62,7 +62,7 @@ export default function BusinessControlCenter() {
         <View style={{ backgroundColor: '#173f2d', borderRadius: 22, padding: 18, gap: 8 }}>
           <Text style={{ color: '#c8ead7', fontSize: 13, fontWeight: '800' }}>LIVE ANALYTICS FOUNDATION</Text>
           <Text style={{ color: '#fff', fontSize: 20, lineHeight: 26, fontWeight: '800' }}>{eventTypes} analytics event categories are active in this dashboard window.</Text>
-          <Text style={{ color: '#dce9e2' }}>Growth intelligence will consume the existing canonical analytics RPCs rather than create a parallel metrics layer.</Text>
+          <Text style={{ color: '#dce9e2' }}>Growth intelligence consumes the existing canonical analytics RPCs rather than a parallel metrics layer.</Text>
         </View>
       )}
 
@@ -71,6 +71,7 @@ export default function BusinessControlCenter() {
         <RouteCard href="/profile" title="Business profile" detail="Identity, contact information and public business presence" />
         <RouteCard href="/locations" title="Locations" detail="Canonical locations, amenities, active state and media inventory" />
         <RouteCard href="/reviews" title="Reviews & replies" detail="Customer review intelligence and authorized business replies" />
+        <RouteCard href="/engagement" title="Engagement" detail="QR lifecycle, promotions, campaigns, contests, events, attribution and shared analytics" />
       </View>
 
       <View style={{ backgroundColor: 'white', borderRadius: 18, padding: 16, gap: 6 }}>
@@ -83,7 +84,7 @@ export default function BusinessControlCenter() {
   );
 }
 
-function RouteCard({ href, title, detail }: { href: '/profile' | '/locations' | '/reviews'; title: string; detail: string }) {
+function RouteCard({ href, title, detail }: { href: '/profile' | '/locations' | '/reviews' | '/engagement'; title: string; detail: string }) {
   return (
     <Link href={href} asChild>
       <Pressable style={{ backgroundColor: 'white', borderRadius: 18, padding: 16, gap: 5 }}>
