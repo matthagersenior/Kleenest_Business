@@ -2,6 +2,24 @@
 
 Kleenest Business is the Android-first business control center for organizations operating locations in the Kleenest network.
 
+## Canonical repository contract
+
+Kleenest is built as a coordinated product system with strict repository ownership:
+
+- **`Kleenest_Architecture/main`** is the canonical source for features, service contracts, product rules, data models, workflows, provenance, analytics, QR, Business, Fleet and Enterprise design information. We mine Architecture for the behavior and contracts to implement; customer-facing runtime code does not live there.
+- **`Kleenest_Production`** is the live Consumer/Premium product counterpart and the source of proven mobile/runtime patterns. Business features that interact with Consumer/Premium users must remain compatible with Production's shared backend contracts and live network behavior.
+- **`Kleenest_Business`** owns the Business application implementation. Business code belongs here even when the originating feature or service definition comes from Architecture.
+- **`Kleenest_Fleet`** owns the Fleet application implementation. Fleet communicates with Production because Fleet clients and Premium recipients use substantial portions of the Production/Consumer framework and network.
+- **`Kleenest_Owner`** owns the private Platform Owner application and must communicate with Production, Business and Fleet through canonical backend/admin contracts.
+
+There is **no separate Enterprise application or Enterprise repository**. Enterprise is a capability layer implemented in both Business and Fleet:
+
+- Business Growth intentionally contains a substantial subset of Enterprise-class intelligence and operating capabilities at a smaller scale.
+- Business Enterprise expands Business beyond Growth limits and adds enterprise governance/integration capabilities.
+- Fleet Enterprise is an upgrade to Fleet and is required for multi-location Fleet monitoring.
+
+Cross-app interoperability must happen through canonical Supabase/backend services, authorization and shared domain contracts—not by importing one customer application directly into another.
+
 ## Product model
 
 - **Standard — $20/month**: core business management and engagement for one location.
@@ -36,6 +54,12 @@ Plan entitlements decide *what the organization purchased or received through a 
 
 Fleet membership and Business membership remain separately scoped. Having Fleet does not grant Enterprise Business capabilities. Fleet only guarantees the bundled Business Standard entitlement unless the organization separately has Growth or Enterprise.
 
-## Architecture sources
+## Implementation rule
 
-This repository is being built from the proven foundations in `Kleenest_Architecture/main` and the Expo/mobile runtime patterns in `Kleenest_Production`, while deliberately omitting consumer-only surfaces.
+For every Business implementation wave:
+
+1. inspect `Kleenest_Architecture/main` for the canonical feature, service, schema and behavior;
+2. inspect `Kleenest_Production` for live shared-network/runtime expectations where the feature touches Consumer/Premium users;
+3. implement the Business runtime in `Kleenest_Business`;
+4. preserve shared backend identifiers, authorization semantics and event/data contracts so Business and Production operate on the same Kleenest network;
+5. place Enterprise Business capabilities in this repository behind Growth/Enterprise entitlement gates as appropriate.
