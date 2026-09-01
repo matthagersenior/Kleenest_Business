@@ -1,9 +1,10 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { BusinessWorkspaceProvider } from '@/state/businessWorkspace';
 
 export default function RootLayout() {
   return (
-    <>
+    <BusinessWorkspaceProvider>
       <StatusBar style="auto" />
       <Stack
         screenOptions={{
@@ -13,7 +14,10 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" options={{ title: 'Business Control Center' }} />
+        <Stack.Screen name="profile" options={{ title: 'Business Profile' }} />
+        <Stack.Screen name="locations" options={{ title: 'Locations' }} />
+        <Stack.Screen name="reviews" options={{ title: 'Reviews' }} />
       </Stack>
-    </>
+    </BusinessWorkspaceProvider>
   );
 }
