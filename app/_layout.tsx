@@ -18,6 +18,7 @@ export default function RootLayout() {
         <Stack.Screen name="locations" options={{ title: 'Locations' }} />
         <Stack.Screen name="reviews" options={{ title: 'Reviews' }} />
         <Stack.Screen name="engagement" options={{ title: 'Engagement' }} />
+        <Stack.Screen name="intelligence" options={{ title: 'Growth Intelligence' }} />
       </Stack>
     </BusinessWorkspaceProvider>
   );
