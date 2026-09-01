@@ -21,16 +21,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: gradle
       - run: npm install --no-audit --no-fund
       - run: npm run audit
       - run: npm run typecheck
       - name: Generate Android project
         run: npx expo prebuild --platform android --clean --non-interactive
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
       - name: Build installable release APK
         working-directory: android
         run: ./gradlew assembleRelease --no-daemon
