@@ -1,94 +1,23 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
-import { listBusinessLocations, listBusinessMedia, listLocationAmenities, manageBusinessLocation, type BusinessAmenity, type BusinessLocation, type BusinessMedia } from '@/services/business';
+import { useCallback,useEffect,useState } from 'react';
+import { ActivityIndicator,Pressable,RefreshControl,ScrollView,Text,TextInput,View } from 'react-native';
+import { createBusinessLocation,listBusinessLocations,listBusinessMedia,listLocationAmenities,setBusinessLocationActive,updateBusinessLocation,type BusinessAmenity,type BusinessLocation,type BusinessMedia } from '@/services/business';
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 
-export default function BusinessLocationsScreen() {
-  const { workspace, access, refresh: refreshWorkspace } = useBusinessWorkspace();
-  const [locations, setLocations] = useState<BusinessLocation[]>([]);
-  const [media, setMedia] = useState<BusinessMedia[]>([]);
-  const [amenities, setAmenities] = useState<Record<string, BusinessAmenity[]>>({});
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    if (!workspace) return;
-    setError(null);
-    const [nextLocations, nextMedia] = await Promise.all([
-      listBusinessLocations(workspace.business_id),
-      listBusinessMedia(workspace.business_id),
-    ]);
-    const amenityEntries = await Promise.all(
-      nextLocations.map(async (location) => [location.id, await listLocationAmenities(workspace.business_id, location.id)] as const),
-    );
-    setLocations(nextLocations);
-    setMedia(nextMedia);
-    setAmenities(Object.fromEntries(amenityEntries));
-  }, [workspace]);
-
-  useEffect(() => {
-    setLoading(true);
-    load().catch((cause) => setError(cause instanceof Error ? cause.message : String(cause))).finally(() => setLoading(false));
-  }, [load]);
-
-  async function reload() {
-    setRefreshing(true);
-    try {
-      await Promise.all([load(), refreshWorkspace()]);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause));
-    } finally {
-      setRefreshing(false);
-    }
-  }
-
-  async function toggle(location: BusinessLocation) {
-    if (!workspace) return;
-    const active = Boolean(location.is_active ?? location.active ?? true);
-    try {
-      await manageBusinessLocation(
-        workspace.business_id,
-        location.id,
-        active ? 'deactivate' : 'update',
-        active ? {} : { is_active: true },
-      );
-      await reload();
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause));
-    }
-  }
-
-  if (loading) return <View style={{ flex: 1, justifyContent: 'center' }}><ActivityIndicator /></View>;
-
-  return (
-    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={reload} />} contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 48 }}>
-      {error ? <Text style={{ color: '#9b2c2c' }}>{error}</Text> : null}
-      <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 16, gap: 4 }}>
-        <Text style={{ fontSize: 18, fontWeight: '800' }}>{locations.length} workspace locations</Text>
-        <Text style={{ color: '#627168' }}>{access?.location_limit == null ? 'Enterprise-scale location entitlement' : `${access.location_limit} location entitlement`}</Text>
-      </View>
-      {locations.map((location) => {
-        const active = Boolean(location.is_active ?? location.active ?? true);
-        const locationMedia = media.filter((item) => item.location_id === location.id);
-        const locationAmenities = amenities[location.id] ?? [];
-        return (
-          <View key={location.id} style={{ backgroundColor: 'white', padding: 16, borderRadius: 18, gap: 9 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 12 }}>
-              <View style={{ flex: 1, gap: 3 }}>
-                <Text style={{ fontSize: 18, fontWeight: '800' }}>{location.name}</Text>
-                <Text style={{ color: '#65746c' }}>{[location.address, location.city, location.state].filter(Boolean).join(', ') || 'Address not completed'}</Text>
-              </View>
-              <Text style={{ fontWeight: '800', color: active ? '#2f6a4e' : '#8b4a4a' }}>{active ? 'ACTIVE' : 'INACTIVE'}</Text>
-            </View>
-            <Text style={{ color: '#586960' }}>{locationAmenities.length} amenities · {locationMedia.length} media assets</Text>
-            {locationAmenities.length > 0 ? <Text style={{ color: '#66766e' }}>{locationAmenities.slice(0, 6).map((item) => item.name).join(' · ')}</Text> : null}
-            <Pressable onPress={() => toggle(location)} style={{ alignSelf: 'flex-start', borderRadius: 999, paddingHorizontal: 14, paddingVertical: 9, backgroundColor: '#edf3ef' }}>
-              <Text style={{ fontWeight: '800', color: '#244d39' }}>{active ? 'Deactivate location' : 'Activate location'}</Text>
-            </Pressable>
-          </View>
-        );
-      })}
-    </ScrollView>
-  );
+const empty={name:'',address:'',city:'',state:'',postalCode:'',phone:'',website:''};
+export default function BusinessLocationsScreen(){
+ const{workspace,access,refresh:refreshWorkspace}=useBusinessWorkspace();const[locations,setLocations]=useState<BusinessLocation[]>([]);const[media,setMedia]=useState<BusinessMedia[]>([]);const[amenities,setAmenities]=useState<Record<string,BusinessAmenity[]>>({});const[form,setForm]=useState(empty);const[editing,setEditing]=useState<BusinessLocation|null>(null);const[loading,setLoading]=useState(true);const[refreshing,setRefreshing]=useState(false);const[saving,setSaving]=useState(false);const[error,setError]=useState<string|null>(null);
+ const load=useCallback(async()=>{if(!workspace)return;setError(null);const[nextLocations,nextMedia]=await Promise.all([listBusinessLocations(workspace.business_id),listBusinessMedia(workspace.business_id)]);const entries=await Promise.all(nextLocations.map(async l=>[l.id,await listLocationAmenities(workspace.business_id,l.id)] as const));setLocations(nextLocations);setMedia(nextMedia);setAmenities(Object.fromEntries(entries));},[workspace]);
+ useEffect(()=>{setLoading(true);load().catch(c=>setError(c instanceof Error?c.message:String(c))).finally(()=>setLoading(false));},[load]);
+ async function reload(){setRefreshing(true);try{await Promise.all([load(),refreshWorkspace()]);}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setRefreshing(false);}}
+ function edit(l:BusinessLocation){setEditing(l);setForm({name:l.name,address:String(l.address??''),city:String(l.city??''),state:String(l.state??''),postalCode:String(l.postal_code??''),phone:String(l.phone??''),website:String(l.website??'')});}
+ function reset(){setEditing(null);setForm(empty);}
+ async function save(){if(!workspace||!form.name.trim())return;setSaving(true);setError(null);try{if(editing){await updateBusinessLocation(editing.id,{name:form.name.trim(),address:form.address||null,phone:form.phone||null,website:form.website||null,active:Boolean(editing.is_active??editing.active??true)});}else{if(access?.location_limit!=null&&locations.length>=access.location_limit)throw new Error('This Business plan has reached its location limit. Enterprise is required beyond the current entitlement.');await createBusinessLocation(workspace.business_id,{...form,name:form.name.trim()});}reset();await reload();}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setSaving(false);}}
+ async function toggle(l:BusinessLocation){try{await setBusinessLocationActive(l.id,!Boolean(l.is_active??l.active??true));await reload();}catch(c){setError(c instanceof Error?c.message:String(c));}}
+ if(loading)return <View style={{flex:1,justifyContent:'center'}}><ActivityIndicator/></View>;
+ return <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={reload}/>} contentContainerStyle={{padding:16,gap:14,paddingBottom:48}}>
+  {error?<Text style={{color:'#9b2c2c'}}>{error}</Text>:null}
+  <View style={{backgroundColor:'white',padding:15,borderRadius:16,gap:4}}><Text style={{fontSize:18,fontWeight:'800'}}>{locations.length} workspace locations</Text><Text style={{color:'#627168'}}>{access?.location_limit==null?'Enterprise-scale location entitlement':`${access.location_limit} location entitlement`}</Text></View>
+  <View style={{backgroundColor:'white',padding:16,borderRadius:18,gap:9}}><Text style={{fontSize:18,fontWeight:'800'}}>{editing?'Edit location':'Add location'}</Text>{(['name','address','city','state','postalCode','phone','website'] as const).map(k=><TextInput key={k} value={form[k]} onChangeText={v=>setForm(s=>({...s,[k]:v}))} placeholder={k==='postalCode'?'Postal code':k[0].toUpperCase()+k.slice(1)} style={{borderWidth:1,borderColor:'#dce4df',borderRadius:12,padding:11}}/>)}<View style={{flexDirection:'row',gap:8}}><Pressable disabled={saving} onPress={save} style={{backgroundColor:'#173f2d',borderRadius:999,paddingHorizontal:15,paddingVertical:10}}><Text style={{color:'white',fontWeight:'800'}}>{saving?'Saving…':editing?'Save location':'Create location'}</Text></Pressable>{editing?<Pressable onPress={reset} style={{padding:10}}><Text>Cancel</Text></Pressable>:null}</View></View>
+  {locations.map(l=>{const active=Boolean(l.is_active??l.active??true),lm=media.filter(m=>m.location_id===l.id),la=amenities[l.id]??[];return <View key={l.id} style={{backgroundColor:'white',padding:16,borderRadius:18,gap:9}}><View style={{flexDirection:'row',justifyContent:'space-between',gap:12}}><View style={{flex:1,gap:3}}><Text style={{fontSize:18,fontWeight:'800'}}>{l.name}</Text><Text style={{color:'#65746c'}}>{[l.address,l.city,l.state].filter(Boolean).join(', ')||'Address not completed'}</Text></View><Text style={{fontWeight:'800',color:active?'#2f6a4e':'#8b4a4a'}}>{active?'ACTIVE':'INACTIVE'}</Text></View><Text style={{color:'#586960'}}>{la.length} amenities · {lm.length} media assets</Text>{la.length?<Text style={{color:'#66766e'}}>{la.slice(0,6).map(a=>a.name).join(' · ')}</Text>:null}<View style={{flexDirection:'row',gap:8}}><Pressable onPress={()=>edit(l)} style={{borderRadius:999,paddingHorizontal:14,paddingVertical:9,backgroundColor:'#edf3ef'}}><Text style={{fontWeight:'800'}}>Edit</Text></Pressable><Pressable onPress={()=>toggle(l)} style={{borderRadius:999,paddingHorizontal:14,paddingVertical:9,backgroundColor:'#edf3ef'}}><Text style={{fontWeight:'800',color:'#244d39'}}>{active?'Deactivate':'Activate'}</Text></Pressable></View></View>})}
+ </ScrollView>;
 }
