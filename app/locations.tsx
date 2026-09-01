@@ -47,7 +47,12 @@ export default function BusinessLocationsScreen() {
     if (!workspace) return;
     const active = Boolean(location.is_active ?? location.active ?? true);
     try {
-      await manageBusinessLocation(workspace.business_id, location.id, active ? 'deactivate' : 'activate', {});
+      await manageBusinessLocation(
+        workspace.business_id,
+        location.id,
+        active ? 'deactivate' : 'update',
+        active ? {} : { is_active: true },
+      );
       await reload();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
@@ -60,7 +65,7 @@ export default function BusinessLocationsScreen() {
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={reload} />} contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 48 }}>
       {error ? <Text style={{ color: '#9b2c2c' }}>{error}</Text> : null}
       <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 16, gap: 4 }}>
-        <Text style={{ fontSize: 18, fontWeight: '800' }}>{locations.length} active workspace locations</Text>
+        <Text style={{ fontSize: 18, fontWeight: '800' }}>{locations.length} workspace locations</Text>
         <Text style={{ color: '#627168' }}>{access?.location_limit == null ? 'Enterprise-scale location entitlement' : `${access.location_limit} location entitlement`}</Text>
       </View>
       {locations.map((location) => {
