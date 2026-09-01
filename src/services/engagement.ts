@@ -40,19 +40,45 @@ export async function listCampaigns(businessId: string): Promise<EngagementRecor
 export async function manageCampaign(
   businessId: string,
   campaignId: string | null,
-  action: 'create' | 'update' | 'pause' | 'activate',
+  action: 'create' | 'update' | 'pause' | 'activate' | 'delete',
   input: { name?: string; campaignType?: string; goal?: string; status?: string } = {},
 ) {
-  const { data, error } = await client().rpc('business_manage_campaign', {
+  if (action === 'create') {
+    const { data, error } = await client().rpc('business_create_campaign', {
+      p_business_id: businessId,
+      p_name: input.name ?? 'New Kleenest campaign',
+      p_campaign_type: input.campaignType ?? 'engagement',
+      p_goal: input.goal ?? null,
+      p_status: input.status ?? 'draft',
+    });
+    return unwrap(data as string | null, error);
+  }
+
+  if (!campaignId) throw new Error('Campaign id is required.');
+
+  if (action === 'activate' || action === 'pause') {
+    const rpc = action === 'activate' ? 'activate_enterprise_partner_campaign' : 'pause_enterprise_partner_campaign';
+    const { data, error } = await client().rpc(rpc, { p_campaign_id: campaignId });
+    return unwrap(data, error);
+  }
+
+  if (action === 'delete') {
+    const { data, error } = await client().rpc('business_delete_campaign', {
+      p_business_id: businessId,
+      p_campaign_id: campaignId,
+    });
+    return unwrap(data, error);
+  }
+
+  const { data, error } = await client().rpc('business_update_campaign', {
     p_business_id: businessId,
     p_campaign_id: campaignId,
-    p_action: action,
     p_name: input.name ?? null,
     p_campaign_type: input.campaignType ?? null,
     p_goal: input.goal ?? null,
     p_status: input.status ?? null,
   });
-  return unwrap(data as Record<string, unknown> | null, error);
+  return unwrap(data as string | null, error);
 }
 
 export async function listContests(businessId: string): Promise<EngagementRecord[]> {
