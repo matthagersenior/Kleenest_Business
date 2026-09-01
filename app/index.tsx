@@ -2,22 +2,14 @@ import { Link } from 'expo-router';
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 
-function readNumber(source: Record<string, unknown> | null, keys: string[], fallback = 0) {
-  if (!source) return fallback;
-  for (const key of keys) {
-    const value = source[key];
-    if (typeof value === 'number' && Number.isFinite(value)) return value;
-  }
-  return fallback;
+function readNumber(source: Record<string, unknown> | null, key: string, fallback = 0) {
+  const value = source?.[key];
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
-function readText(source: Record<string, unknown> | null, keys: string[], fallback: string) {
-  if (!source) return fallback;
-  for (const key of keys) {
-    const value = source[key];
-    if (typeof value === 'string' && value.trim()) return value;
-  }
-  return fallback;
+function readObject(source: Record<string, unknown> | null, key: string): Record<string, unknown> {
+  const value = source?.[key];
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
 }
 
 export default function BusinessControlCenter() {
@@ -39,18 +31,14 @@ export default function BusinessControlCenter() {
     );
   }
 
-  const reviewResponse = readNumber(dashboard, ['review_response_rate', 'reviewResponseRate']);
-  const awaitingReplies = readNumber(dashboard, ['reviews_awaiting_reply', 'awaiting_replies']);
-  const qrScans = readNumber(dashboard, ['qr_scans', 'qr_scan_count']);
-  const profileCompleteness = readNumber(dashboard, ['profile_completeness', 'profileCompleteness']);
-  const recommendation = readText(dashboard, ['top_recommendation', 'recommendation'], 'Open Intelligence to review the latest recommended action.');
-
+  const summary = readObject(dashboard, 'summary');
   const cards = [
     { label: 'Locations', value: String(access.location_count), detail: access.location_limit == null ? 'Enterprise-scale access' : `${access.location_limit} location limit` },
-    { label: 'Profile completeness', value: `${Math.round(profileCompleteness)}%`, detail: 'Canonical business profile' },
-    { label: 'Review response', value: `${Math.round(reviewResponse)}%`, detail: `${awaitingReplies} awaiting reply` },
-    { label: 'QR engagement', value: qrScans.toLocaleString(), detail: '30-day scans' },
+    { label: 'Reviews', value: readNumber(dashboard, 'reviews').toLocaleString(), detail: 'Current 30-day window' },
+    { label: 'Check-ins', value: readNumber(dashboard, 'check_ins').toLocaleString(), detail: 'Current 30-day window' },
+    { label: 'Redemptions', value: readNumber(dashboard, 'redemptions').toLocaleString(), detail: 'Promotion redemptions' },
   ];
+  const eventTypes = Object.keys(summary).length;
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />} contentContainerStyle={{ padding: 16, paddingBottom: 48, gap: 18 }}>
@@ -71,9 +59,10 @@ export default function BusinessControlCenter() {
       </View>
 
       {(access.plan === 'growth' || access.enterprise_enabled) && (
-        <View style={{ backgroundColor: '#173f2d', borderRadius: 22, padding: 18, gap: 10 }}>
-          <Text style={{ color: '#c8ead7', fontSize: 13, fontWeight: '800' }}>INTELLIGENCE</Text>
-          <Text style={{ color: '#fff', fontSize: 20, lineHeight: 26, fontWeight: '800' }}>{recommendation}</Text>
+        <View style={{ backgroundColor: '#173f2d', borderRadius: 22, padding: 18, gap: 8 }}>
+          <Text style={{ color: '#c8ead7', fontSize: 13, fontWeight: '800' }}>LIVE ANALYTICS FOUNDATION</Text>
+          <Text style={{ color: '#fff', fontSize: 20, lineHeight: 26, fontWeight: '800' }}>{eventTypes} analytics event categories are active in this dashboard window.</Text>
+          <Text style={{ color: '#dce9e2' }}>Growth intelligence will consume the existing canonical analytics RPCs rather than create a parallel metrics layer.</Text>
         </View>
       )}
 
