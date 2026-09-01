@@ -12,6 +12,7 @@ type ReviewRecord = {
   body?: string | null;
   reply?: string | null;
   business_reply?: string | null;
+  location?: string | null;
   location_name?: string | null;
   created_at?: string;
   [key: string]: unknown;
@@ -92,7 +93,7 @@ export default function BusinessReviewsScreen() {
         return (
           <View key={id} style={{ backgroundColor: 'white', padding: 16, borderRadius: 18, gap: 9 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
-              <Text style={{ fontWeight: '800', fontSize: 16 }}>{String(review.location_name ?? 'Kleenest location')}</Text>
+              <Text style={{ fontWeight: '800', fontSize: 16 }}>{String(review.location ?? review.location_name ?? 'Kleenest location')}</Text>
               <Text style={{ fontWeight: '800' }}>{rating ? `${rating}/5` : 'Review'}</Text>
             </View>
             <Text style={{ color: '#53645b', lineHeight: 21 }}>{String(review.comment ?? review.body ?? 'No written comment.')}</Text>
