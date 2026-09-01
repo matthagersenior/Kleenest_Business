@@ -25,11 +25,7 @@ function unwrap<T>(data: T | null, error: { message: string } | null): T {
 function windowArgs(businessId: string, days = 30) {
   const end = new Date();
   const start = new Date(end.getTime() - days * 86_400_000);
-  return {
-    p_business_id: businessId,
-    p_start: start.toISOString(),
-    p_end: end.toISOString(),
-  };
+  return { p_business_id: businessId, p_start: start.toISOString(), p_end: end.toISOString() };
 }
 
 export async function listCampaigns(businessId: string): Promise<EngagementRecord[]> {
@@ -37,47 +33,21 @@ export async function listCampaigns(businessId: string): Promise<EngagementRecor
   return unwrap((data ?? []) as EngagementRecord[], error);
 }
 
-export async function manageCampaign(
-  businessId: string,
-  campaignId: string | null,
-  action: 'create' | 'update' | 'pause' | 'activate' | 'delete',
-  input: { name?: string; campaignType?: string; goal?: string; status?: string } = {},
-) {
+export async function manageCampaign(businessId: string, campaignId: string | null, action: 'create' | 'update' | 'pause' | 'activate' | 'delete', input: { name?: string; campaignType?: string; goal?: string; status?: string } = {}) {
   if (action === 'create') {
-    const { data, error } = await client().rpc('business_create_campaign', {
-      p_business_id: businessId,
-      p_name: input.name ?? 'New Kleenest campaign',
-      p_campaign_type: input.campaignType ?? 'engagement',
-      p_goal: input.goal ?? null,
-      p_status: input.status ?? 'draft',
-    });
+    const { data, error } = await client().rpc('business_create_campaign', { p_business_id: businessId, p_name: input.name ?? 'New Kleenest campaign', p_campaign_type: input.campaignType ?? 'engagement', p_goal: input.goal ?? null, p_status: input.status ?? 'draft' });
     return unwrap(data as string | null, error);
   }
-
   if (!campaignId) throw new Error('Campaign id is required.');
-
   if (action === 'activate' || action === 'pause') {
-    const rpc = action === 'activate' ? 'activate_enterprise_partner_campaign' : 'pause_enterprise_partner_campaign';
-    const { data, error } = await client().rpc(rpc, { p_campaign_id: campaignId });
+    const { data, error } = await client().rpc(action === 'activate' ? 'activate_enterprise_partner_campaign' : 'pause_enterprise_partner_campaign', { p_campaign_id: campaignId });
     return unwrap(data, error);
   }
-
   if (action === 'delete') {
-    const { data, error } = await client().rpc('business_delete_campaign', {
-      p_business_id: businessId,
-      p_campaign_id: campaignId,
-    });
+    const { data, error } = await client().rpc('business_delete_campaign', { p_business_id: businessId, p_campaign_id: campaignId });
     return unwrap(data, error);
   }
-
-  const { data, error } = await client().rpc('business_update_campaign', {
-    p_business_id: businessId,
-    p_campaign_id: campaignId,
-    p_name: input.name ?? null,
-    p_campaign_type: input.campaignType ?? null,
-    p_goal: input.goal ?? null,
-    p_status: input.status ?? null,
-  });
+  const { data, error } = await client().rpc('business_update_campaign', { p_business_id: businessId, p_campaign_id: campaignId, p_name: input.name ?? null, p_campaign_type: input.campaignType ?? null, p_goal: input.goal ?? null, p_status: input.status ?? null });
   return unwrap(data as string | null, error);
 }
 
@@ -86,18 +56,8 @@ export async function listContests(businessId: string): Promise<EngagementRecord
   return unwrap((data ?? []) as EngagementRecord[], error);
 }
 
-export async function manageContest(
-  businessId: string,
-  contestId: string | null,
-  action: 'create' | 'update' | 'activate' | 'pause' | 'resume' | 'delete',
-  payload: Record<string, unknown> = {},
-) {
-  const { data, error } = await client().rpc('business_manage_contest', {
-    p_business_id: businessId,
-    p_contest_id: contestId,
-    p_action: action,
-    p_payload: payload,
-  });
+export async function manageContest(businessId: string, contestId: string | null, action: 'create' | 'update' | 'activate' | 'pause' | 'resume' | 'delete', payload: Record<string, unknown> = {}) {
+  const { data, error } = await client().rpc('business_manage_contest', { p_business_id: businessId, p_contest_id: contestId, p_action: action, p_payload: payload });
   return unwrap(data as Record<string, unknown> | null, error);
 }
 
@@ -106,95 +66,62 @@ export async function listEvents(businessId: string): Promise<EngagementRecord[]
   return unwrap((data ?? []) as EngagementRecord[], error);
 }
 
-export async function manageEvent(
-  businessId: string,
-  eventId: string | null,
-  action: 'create' | 'update' | 'delete',
-  payload: Record<string, unknown> = {},
-) {
-  const { data, error } = await client().rpc('business_manage_event', {
-    p_business_id: businessId,
-    p_event_id: eventId,
-    p_action: action,
-    p_payload: payload,
-  });
+export async function manageEvent(businessId: string, eventId: string | null, action: 'create' | 'update' | 'delete', payload: Record<string, unknown> = {}) {
+  const { data, error } = await client().rpc('business_manage_event', { p_business_id: businessId, p_event_id: eventId, p_action: action, p_payload: payload });
   return unwrap(data as Record<string, unknown> | null, error);
 }
 
-export async function managePromotion(
-  businessId: string,
-  promotionId: string | null,
-  action: 'create' | 'update' | 'deactivate',
-  payload: Record<string, unknown> = {},
-) {
-  const { data, error } = await client().rpc('business_manage_promotion', {
-    p_business_id: businessId,
-    p_promotion_id: promotionId,
-    p_action: action,
-    p_payload: payload,
-  });
+export async function managePromotion(businessId: string, promotionId: string | null, action: 'create' | 'update' | 'deactivate', payload: Record<string, unknown> = {}) {
+  const { data, error } = await client().rpc('business_manage_promotion', { p_business_id: businessId, p_promotion_id: promotionId, p_action: action, p_payload: payload });
   return unwrap(data as Record<string, unknown> | null, error);
 }
 
-export async function manageQr(
-  businessId: string,
-  locationId: string | null,
-  qrId: string | null,
-  action: 'create' | 'update' | 'deactivate',
-  payload: Record<string, unknown> = {},
-) {
-  const { data, error } = await client().rpc('business_manage_qr', {
-    p_business_id: businessId,
-    p_location_id: locationId,
-    p_qr_id: qrId,
-    p_action: action,
-    p_payload: payload,
-  });
+export async function setPromotionActive(businessId: string, promotionId: string, active: boolean) {
+  const { data, error } = await client().rpc('business_set_promotion_active', { p_business_id: businessId, p_promotion_id: promotionId, p_active: active });
   return unwrap(data as Record<string, unknown> | null, error);
+}
+
+export async function manageQr(businessId: string, locationId: string | null, qrId: string | null, action: 'create' | 'update' | 'deactivate', payload: Record<string, unknown> = {}) {
+  const { data, error } = await client().rpc('business_manage_qr', { p_business_id: businessId, p_location_id: locationId, p_qr_id: qrId, p_action: action, p_payload: payload });
+  return unwrap(data as Record<string, unknown> | null, error);
+}
+
+export async function setQrActive(businessId: string, qrId: string, active: boolean) {
+  const { data, error } = await client().rpc('business_set_qr_status', { p_business_id: businessId, p_qr_id: qrId, p_active: active });
+  return unwrap(data as Record<string, unknown> | null, error);
+}
+
+export async function setQrCustomization(businessId: string, qrId: string, customization: Record<string, unknown>) {
+  const { data, error } = await client().rpc('set_business_qr_customization', { p_business_id: businessId, p_qr_id: qrId, p_customization: customization });
+  return unwrap(data as boolean | null, error);
+}
+
+export async function listQrEngagementPrograms(qrCodeId: string): Promise<EngagementRecord[]> {
+  const { data, error } = await client().rpc('list_qr_engagement_programs', { p_qr_code_id: qrCodeId });
+  return unwrap((data ?? []) as EngagementRecord[], error);
+}
+
+export async function createQrEngagementProgram(qrCodeId: string, input: { programType: string; name: string; description?: string; rewardConfig?: Record<string, unknown>; triggerCount?: number }) {
+  const { data, error } = await client().rpc('create_qr_engagement_program', { p_qr_code_id: qrCodeId, p_program_type: input.programType, p_name: input.name, p_description: input.description ?? null, p_reward_config: input.rewardConfig ?? {}, p_trigger_count: input.triggerCount ?? 1 });
+  return unwrap(data as string | null, error);
 }
 
 export async function getEngagementBundle(businessId: string, days = 30) {
   const args = windowArgs(businessId, days);
-  const [engagement, campaigns, events, promotions, qr] = await Promise.all([
+  const [engagement, attribution, funnel, campaigns, events, promotions, qr] = await Promise.all([
     client().rpc('business_engagement_analytics', args),
+    client().rpc('get_business_attribution_funnel', args),
+    client().rpc('get_business_engagement_funnel', args),
     client().rpc('business_campaign_detail', args),
     client().rpc('business_event_detail', args),
     client().rpc('business_promotion_detail', args),
     client().rpc('business_qr_detail', args),
   ]);
-
-  for (const response of [engagement, campaigns, events, promotions, qr]) {
-    if (response.error) throw new Error(response.error.message);
-  }
-
-  return {
-    engagement: engagement.data,
-    campaigns: campaigns.data,
-    events: events.data,
-    promotions: promotions.data,
-    qr: qr.data,
-  };
+  for (const response of [engagement, attribution, funnel, campaigns, events, promotions, qr]) if (response.error) throw new Error(response.error.message);
+  return { engagement: engagement.data, attribution: attribution.data, funnel: funnel.data, campaigns: campaigns.data, events: events.data, promotions: promotions.data, qr: qr.data };
 }
 
-export async function recordBusinessAttribution(
-  businessId: string,
-  input: {
-    locationId?: string | null;
-    partnerNetworkId?: string | null;
-    campaignId?: string | null;
-    activityType: string;
-    source?: string;
-    metadata?: Record<string, unknown>;
-  },
-) {
-  const { data, error } = await client().rpc('record_business_engagement_attribution', {
-    p_business_id: businessId,
-    p_location_id: input.locationId ?? null,
-    p_partner_network_id: input.partnerNetworkId ?? null,
-    p_campaign_id: input.campaignId ?? null,
-    p_activity_type: input.activityType,
-    p_source: input.source ?? 'business_app',
-    p_metadata: input.metadata ?? {},
-  });
+export async function recordBusinessAttribution(businessId: string, input: { locationId?: string | null; partnerNetworkId?: string | null; campaignId?: string | null; activityType: string; source?: string; metadata?: Record<string, unknown> }) {
+  const { data, error } = await client().rpc('record_business_engagement_attribution', { p_business_id: businessId, p_location_id: input.locationId ?? null, p_partner_network_id: input.partnerNetworkId ?? null, p_campaign_id: input.campaignId ?? null, p_activity_type: input.activityType, p_source: input.source ?? 'business_app', p_metadata: input.metadata ?? {} });
   return unwrap(data as Record<string, unknown> | null, error);
 }
