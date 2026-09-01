@@ -4,12 +4,12 @@ Kleenest Business is the Android-first business control center for organizations
 
 ## Product model
 
-- **Standard — $20/month**: core business management and engagement.
-- **Growth — $50/month**: Standard plus advanced intelligence, recommendations, reports, audits, automation-ready tooling, and multi-location management for up to **5 locations**.
-- **Enterprise — contact Kleenest**: required for **6+ locations**, negotiated/custom needs, cross-product organization controls, advanced governance, and enterprise-scale operations.
-- **Fleet add-on**: Fleet is a separate product entitlement. When a Business organization adds Fleet, its Business entitlement is automatically promoted to Enterprise while Fleet remains separately identifiable for authorization and billing.
+- **Standard — $20/month**: core business management and engagement for one location.
+- **Growth — $50/month**: Standard plus advanced intelligence, recommendations, reports, audits, automation-ready tooling, and multi-location Business management for up to **5 locations**.
+- **Enterprise — contact Kleenest**: required for **6+ Business locations**, custom or negotiated requirements, advanced governance, integrations, cross-product controls, and enterprise-scale operations.
+- **Fleet**: a separate app/product for organizations that need to provide Kleenest Premium access to a group larger than the Family-plan model. Fleet includes **Business Standard**. Fleet may monitor one location without Enterprise; monitoring more than one location requires **Enterprise**.
 
-Enterprise is a capability layer, not a separate customer-facing app. The Fleet app can add Enterprise-for-Business capabilities, and Business can add Fleet.
+Enterprise is a capability layer, not a separate customer-facing app. Business and Fleet remain separate products, while Enterprise expands whichever product needs enterprise-scale capabilities.
 
 ## App focus
 
@@ -32,7 +32,9 @@ Business roles are organization-scoped and capability-gated:
 - `business_marketing`
 - `business_staff`
 
-Plan entitlements decide *what the organization purchased*. Role capabilities decide *what the signed-in person may do*. Backend authorization remains authoritative.
+Plan entitlements decide *what the organization purchased or received through a product bundle*. Role capabilities decide *what the signed-in person may do*. Backend authorization remains authoritative.
+
+Fleet membership and Business membership remain separately scoped. Having Fleet does not grant Enterprise Business capabilities. Fleet only guarantees the bundled Business Standard entitlement unless the organization separately has Growth or Enterprise.
 
 ## Architecture sources
 
