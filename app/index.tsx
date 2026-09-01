@@ -12,7 +12,7 @@ function readObject(source: Record<string, unknown> | null, key: string): Record
   return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
 }
 
-type BusinessRoute = '/profile' | '/locations' | '/reviews' | '/engagement' | '/intelligence' | '/governance';
+type BusinessRoute = '/profile' | '/locations' | '/reviews' | '/engagement' | '/intelligence' | '/governance' | '/enterprise';
 
 export default function BusinessControlCenter() {
   const { loading, refreshing, error, workspace, access, dashboard, refresh } = useBusinessWorkspace();
@@ -80,7 +80,8 @@ export default function BusinessControlCenter() {
       <View style={{ gap: 10 }}>
         <Text style={{ fontSize: 22, fontWeight: '800', color: '#14271e' }}>Intelligence & governance</Text>
         {growthEnabled ? <RouteCard href="/intelligence" title="Growth Intelligence" detail="Canonical growth cockpit, benchmarks, ROI, recommendations, operations and reporting" /> : null}
-        <RouteCard href="/governance" title="Governance & Trust" detail="Reporting schedules, provenance/trust quality, conflicts and Enterprise control-plane access" />
+        <RouteCard href="/governance" title="Governance & Trust" detail="Reporting schedules, provenance/trust quality, conflicts and service governance" />
+        {access.enterprise_enabled ? <RouteCard href="/enterprise" title="Enterprise" detail="Partner networks, cross-business campaigns and Enterprise control-plane state" /> : null}
       </View>
 
       <View style={{ backgroundColor: 'white', borderRadius: 18, padding: 16, gap: 6 }}>
