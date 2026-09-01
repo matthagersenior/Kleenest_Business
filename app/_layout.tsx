@@ -6,15 +6,11 @@ export default function RootLayout() {
   return (
     <BusinessWorkspaceProvider>
       <StatusBar style="auto" />
-      <Stack
-        screenOptions={{
-          headerLargeTitle: true,
-          headerShadowVisible: false,
-          contentStyle: { backgroundColor: '#f5f7f6' },
-        }}
-      >
+      <Stack screenOptions={{ headerLargeTitle: true, headerShadowVisible: false, contentStyle: { backgroundColor: '#f5f7f6' } }}>
         <Stack.Screen name="index" options={{ title: 'Business Control Center' }} />
+        <Stack.Screen name="auth" options={{ title: 'Business Sign In' }} />
         <Stack.Screen name="profile" options={{ title: 'Business Profile' }} />
+        <Stack.Screen name="members" options={{ title: 'Team & Roles' }} />
         <Stack.Screen name="locations" options={{ title: 'Locations' }} />
         <Stack.Screen name="reviews" options={{ title: 'Reviews' }} />
         <Stack.Screen name="engagement" options={{ title: 'Engagement' }} />
