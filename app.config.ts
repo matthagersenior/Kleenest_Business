@@ -16,7 +16,7 @@ const config: ExpoConfig = {
     package: 'com.kleenest.business',
   },
   web: {
-    output: 'single',
+    output: 'static',
     bundler: 'metro',
     name: 'Kleenest Business',
     shortName: 'Kleenest Business',
