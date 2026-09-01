@@ -1,11 +1,25 @@
 import 'react-native-url-polyfill/auto';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const secureStorage = {
+const nativeSecureStorage = {
   getItem: (key: string) => SecureStore.getItemAsync(key),
   setItem: (key: string, value: string) => SecureStore.setItemAsync(key, value),
   removeItem: (key: string) => SecureStore.deleteItemAsync(key),
+};
+
+const webStorage = {
+  getItem: async (key: string) => {
+    if (typeof window === 'undefined') return null;
+    return window.localStorage.getItem(key);
+  },
+  setItem: async (key: string, value: string) => {
+    if (typeof window !== 'undefined') window.localStorage.setItem(key, value);
+  },
+  removeItem: async (key: string) => {
+    if (typeof window !== 'undefined') window.localStorage.removeItem(key);
+  },
 };
 
 let singleton: SupabaseClient | null = null;
@@ -24,7 +38,7 @@ export function getSupabaseClient(): SupabaseClient {
 
   singleton = createClient(url, publishableKey, {
     auth: {
-      storage: secureStorage,
+      storage: Platform.OS === 'web' ? webStorage : nativeSecureStorage,
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,
