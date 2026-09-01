@@ -16,17 +16,17 @@ This prevents Fleet, Business, and Enterprise from becoming one ambiguous accoun
 - Basic analytics.
 
 ### Business Growth — $50/month
-- Up to five locations.
+- Up to five Business locations.
 - Everything in Standard.
 - Advanced analytics and intelligence.
 - Recommendations.
 - Reports.
 - Audits and data-quality tooling.
 
-Growth intentionally exposes many Enterprise-class operating tools at a smaller location ceiling. It is still a Growth subscription, not an Enterprise contract.
+Growth intentionally exposes many Enterprise-class Business tools at a smaller location ceiling. It is still a Growth subscription, not an Enterprise contract.
 
 ### Business Enterprise — contact Kleenest
-- Six or more locations.
+- Six or more Business locations.
 - Custom or negotiated requirements.
 - Enterprise governance.
 - Integrations and cross-product controls.
@@ -35,7 +35,9 @@ Growth intentionally exposes many Enterprise-class operating tools at a smaller 
 ### Fleet
 Fleet is its own product entitlement and app. It is not a Business plan name.
 
-When an organization has an active Fleet entitlement, its **effective Business capability bundle becomes Enterprise**. The billing ledger must still retain the actual Business SKU and Fleet SKU separately so this promotion does not create accidental double billing or destroy the purchase history.
+Fleet is designed for an organization that needs to provide Kleenest Premium-user access to more people than the Family-plan model supports. An active Fleet product includes **Business Standard** as a bundled entitlement.
+
+Fleet may monitor **one location** under its normal entitlement. Monitoring **more than one location** requires Enterprise. Fleet itself does not automatically promote Business to Enterprise.
 
 ## Recommended organization record
 
@@ -46,13 +48,16 @@ Conceptually, authorization should resolve these dimensions independently:
 - `organization_id`
 - `business_plan`: `standard | growth | enterprise | none`
 - `fleet_enabled`: boolean
-- `effective_business_plan`: derived server-side
-- `location_count`: derived from canonical active locations
+- `business_standard_source`: `purchased | fleet_bundle | none`
+- `business_location_count`: derived from canonical active Business locations
+- `fleet_monitored_location_count`: derived from Fleet monitoring configuration
 - membership role(s)
 - explicit capability grants/denials where needed
 - subscription status and effective dates
 
-`effective_business_plan` resolves to `enterprise` when `fleet_enabled = true`; otherwise it matches the purchased Business plan. A sixth location never grants Enterprise by itself. It is rejected until the organization has Enterprise-equivalent entitlement.
+Effective Business access resolves to the purchased Business plan when one exists. If no Business plan was purchased but Fleet is active, Business resolves to bundled **Standard**. Fleet never resolves Business to Enterprise by itself.
+
+A sixth Business location never grants Enterprise by itself; it is rejected until Enterprise is active. Likewise, a second Fleet-monitored location is rejected until Enterprise is active.
 
 ## Role model
 
@@ -82,17 +87,25 @@ The mobile app may use the same resolved access model to render navigation and e
 
 ## Cross-product behavior
 
-### Business adds Fleet
-- Create/activate Fleet subscription separately.
-- Promote effective Business capability bundle to Enterprise.
-- Preserve the purchased Business SKU for billing/history.
-- Provision only Fleet roles/capabilities explicitly granted to users.
-- Do not make every Business employee a Fleet user automatically.
+### Fleet organization uses Business
+- Fleet includes Business Standard automatically.
+- No separate Standard purchase is required just to use the bundled Business tools.
+- Business Standard remains limited to one Business location.
+- Fleet monitoring remains limited to one monitored location.
+- Enterprise is required before Fleet can monitor a second location.
+- Fleet roles and Business roles are provisioned separately.
 
-### Fleet adds Business
-- Add a Business product subscription to the existing organization.
-- Because Fleet is active, Business runs with the Enterprise capability bundle.
-- Provision Business memberships separately from Fleet memberships.
+### Fleet organization upgrades Business
+- It may purchase Business Growth for expanded Business management and intelligence across up to five Business locations.
+- Business Growth does **not** expand Fleet monitoring beyond one location.
+- Enterprise is still required for multi-location Fleet monitoring.
+
+### Business organization adds Fleet
+- Create/activate the Fleet entitlement separately.
+- Fleet provides Premium-user access distribution beyond the Family-plan model.
+- Do not promote Business to Enterprise just because Fleet is active.
+- Preserve the current Business plan; if there was no Business plan, Fleet supplies bundled Standard.
+- Provision only Fleet roles/capabilities explicitly granted to users.
 
 ### Fleet roles
 Canonical Fleet role family from Architecture remains:
