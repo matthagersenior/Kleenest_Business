@@ -1,6 +1,6 @@
 import { useCallback,useEffect,useMemo,useState } from 'react';
 import { ActivityIndicator,Pressable,RefreshControl,ScrollView,Text,TextInput,View } from 'react-native';
-import { createQrEngagementProgram,getEngagementBundle,listCampaigns,listContests,listEvents,listQrEngagementPrograms,manageCampaign,manageContest,manageEvent,managePromotion,setPromotionActive,setQrActive,setQrCustomization,type EngagementRecord } from '@/services/engagement';
+import { createQrEngagementProgram,getEngagementBundle,listCampaigns,listContests,listEvents,listQrEngagementPrograms,manageCampaign,manageContest,manageEvent,managePromotion,manageQr,setPromotionActive,setQrActive,setQrCustomization,type EngagementRecord } from '@/services/engagement';
 import { listBusinessLocations } from '@/services/business';
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 type Bundle=Awaited<ReturnType<typeof getEngagementBundle>>;type Draft={name:string;description:string;goal:string;discount:string;date:string;time:string};const blank:Draft={name:'',description:'',goal:'',discount:'',date:'',time:''};
