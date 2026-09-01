@@ -22,7 +22,10 @@ const config: ExpoConfig = {
     shortName: 'Kleenest Business',
   },
   plugins: ['expo-router', 'expo-secure-store'],
-  experiments: { typedRoutes: true },
+  experiments: {
+    typedRoutes: true,
+    baseUrl: '/Kleenest_Business',
+  },
   extra: {
     appRole: 'business',
     supabaseProjectRef: 'ssgesjzdvdsqacdtasje',
