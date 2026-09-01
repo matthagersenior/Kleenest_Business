@@ -12,6 +12,8 @@ function readObject(source: Record<string, unknown> | null, key: string): Record
   return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
 }
 
+type BusinessRoute = '/profile' | '/locations' | '/reviews' | '/engagement' | '/intelligence' | '/governance';
+
 export default function BusinessControlCenter() {
   const { loading, refreshing, error, workspace, access, dashboard, refresh } = useBusinessWorkspace();
 
@@ -39,13 +41,14 @@ export default function BusinessControlCenter() {
     { label: 'Redemptions', value: readNumber(dashboard, 'redemptions').toLocaleString(), detail: 'Promotion redemptions' },
   ];
   const eventTypes = Object.keys(summary).length;
+  const growthEnabled = access.plan === 'growth' || access.enterprise_enabled;
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />} contentContainerStyle={{ padding: 16, paddingBottom: 48, gap: 18 }}>
       <View style={{ gap: 5 }}>
         <Text style={{ fontSize: 13, fontWeight: '800', color: '#3d6754' }}>KLEENEST BUSINESS · {access.plan.toUpperCase()}</Text>
         <Text style={{ fontSize: 28, lineHeight: 34, fontWeight: '800', color: '#12251c' }}>{workspace.business_name ?? workspace.name ?? 'Business Control Center'}</Text>
-        <Text style={{ color: '#5d6e65', fontSize: 15 }}>Live management, engagement and intelligence from the shared Kleenest platform.</Text>
+        <Text style={{ color: '#5d6e65', fontSize: 15 }}>Live management, engagement, intelligence and governance from the shared Kleenest platform.</Text>
       </View>
 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
@@ -58,7 +61,7 @@ export default function BusinessControlCenter() {
         ))}
       </View>
 
-      {(access.plan === 'growth' || access.enterprise_enabled) && (
+      {growthEnabled && (
         <View style={{ backgroundColor: '#173f2d', borderRadius: 22, padding: 18, gap: 8 }}>
           <Text style={{ color: '#c8ead7', fontSize: 13, fontWeight: '800' }}>LIVE ANALYTICS FOUNDATION</Text>
           <Text style={{ color: '#fff', fontSize: 20, lineHeight: 26, fontWeight: '800' }}>{eventTypes} analytics event categories are active in this dashboard window.</Text>
@@ -74,6 +77,12 @@ export default function BusinessControlCenter() {
         <RouteCard href="/engagement" title="Engagement" detail="QR lifecycle, promotions, campaigns, contests, events, attribution and shared analytics" />
       </View>
 
+      <View style={{ gap: 10 }}>
+        <Text style={{ fontSize: 22, fontWeight: '800', color: '#14271e' }}>Intelligence & governance</Text>
+        {growthEnabled ? <RouteCard href="/intelligence" title="Growth Intelligence" detail="Canonical growth cockpit, benchmarks, ROI, recommendations, operations and reporting" /> : null}
+        <RouteCard href="/governance" title="Governance & Trust" detail="Reporting schedules, provenance/trust quality, conflicts and Enterprise control-plane access" />
+      </View>
+
       <View style={{ backgroundColor: 'white', borderRadius: 18, padding: 16, gap: 6 }}>
         <Text style={{ fontSize: 18, fontWeight: '800' }}>Product boundary</Text>
         <Text style={{ color: '#5d6e65', lineHeight: 20 }}>
@@ -84,7 +93,7 @@ export default function BusinessControlCenter() {
   );
 }
 
-function RouteCard({ href, title, detail }: { href: '/profile' | '/locations' | '/reviews' | '/engagement'; title: string; detail: string }) {
+function RouteCard({ href, title, detail }: { href: BusinessRoute; title: string; detail: string }) {
   return (
     <Link href={href} asChild>
       <Pressable style={{ backgroundColor: 'white', borderRadius: 18, padding: 16, gap: 5 }}>
