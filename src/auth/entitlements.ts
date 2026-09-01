@@ -129,7 +129,9 @@ export type BusinessAccessContext = {
 };
 
 export function effectiveBusinessPlan(context: BusinessAccessContext): BusinessPlan {
-  if (context.fleetEnabled || context.locationCount > 5) return 'enterprise';
+  // Fleet is a separately purchased product, but it promotes Business tooling to
+  // the Enterprise capability bundle. Location count alone never grants access.
+  if (context.fleetEnabled) return 'enterprise';
   return context.plan;
 }
 
@@ -144,13 +146,20 @@ export function can(
   );
 }
 
+export function canAddLocation(context: BusinessAccessContext): boolean {
+  const effectivePlan = effectiveBusinessPlan(context);
+  if (effectivePlan === 'enterprise') return true;
+  if (context.plan === 'growth') return context.locationCount < 5;
+  return context.locationCount < 1;
+}
+
 export function validateBusinessPlan(context: BusinessAccessContext): string[] {
   const problems: string[] = [];
-  if (context.plan === 'growth' && context.locationCount > 5) {
+  if (context.plan === 'growth' && !context.fleetEnabled && context.locationCount > 5) {
     problems.push('Growth is limited to 5 locations; Enterprise is required for 6 or more.');
   }
-  if (context.fleetEnabled && context.plan !== 'enterprise') {
-    problems.push('Fleet automatically promotes Business access to Enterprise capabilities.');
+  if (context.plan === 'standard' && !context.fleetEnabled && context.locationCount > 1) {
+    problems.push('Standard is a single-location plan. Growth or Enterprise is required for additional locations.');
   }
   return problems;
 }
