@@ -14,6 +14,7 @@ export default function RootLayout() {
         <Stack.Screen name="locations" options={{ title: 'Locations' }} />
         <Stack.Screen name="reviews" options={{ title: 'Reviews' }} />
         <Stack.Screen name="engagement" options={{ title: 'Engagement' }} />
+        <Stack.Screen name="prevention" options={{ title: 'Preventive Operations' }} />
         <Stack.Screen name="intelligence" options={{ title: 'Growth Intelligence' }} />
         <Stack.Screen name="governance" options={{ title: 'Governance & Trust' }} />
         <Stack.Screen name="enterprise" options={{ title: 'Enterprise' }} />
