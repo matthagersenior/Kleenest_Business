@@ -13,7 +13,8 @@ const comms=requireAll('app/notifications.tsx',['business_custom','sendBusinessN
 const intel=requireAll('app/intelligence.tsx',['getGrowthIntelligenceBundle','ADVANCED INTELLIGENCE','Ask Kleenest AI']);
 const prevention=requireAll('app/prevention.tsx',['execution → verification','Fleet handoff attached','Promise.allSettled']);
 const governance=requireAll('app/governance.tsx',['DataSummary','runDueReportingSchedules','buildGovernanceReport']);
-const enterprise=requireAll('app/enterprise.tsx',['DataSummary','createEnterpriseNetwork','recordEnterpriseCampaignOutcome']);
+const enterprise=requireAll('app/enterprise.tsx',['ENTERPRISE OPERATING SYSTEM','Portfolio businesses','Fleet command','Operational alerts','Location network','createEnterpriseNetwork','recordEnterpriseCampaignOutcome','getEnterpriseOperationalPortfolio']);
+const enterprisePortfolio=requireAll('src/services/enterprisePortfolio.ts',['enterprise_operational_portfolio_snapshot','EnterpriseOperationalPortfolio','locations','routes','alerts']);
 const ai=requireAll('src/services/ai.ts',['functions.invoke','ai-assist','Authorization','business_growth','notification_copy']);
 const tiers=requireAll('src/domain/businessTiers.ts',['advancedEngagement:growth','intelligence:growth','reporting:growth','enterpriseNetworks:enterprise']);
 const intelligenceService=requireAll('src/services/intelligence.ts',['Promise.allSettled','get_business_intelligence_authority_bundle','business_growth_cockpit','business_restroom_prevention_recommendations']);
@@ -26,7 +27,7 @@ if(!authCompact.includes("provider:'google'")&&!authCompact.includes('provider:"
 if(!authCompact.includes('skipBrowserRedirect:true'))throw new Error('Business Google auth must use native browser handoff');
 if(!auth.includes('await refresh()'))throw new Error('Business Google auth must resolve authorized workspaces before entry');
 
-for(const [name,source] of Object.entries({layout,home,locations,locationClaims,reviews,reviewEvidence,qr,comms,intel,prevention,governance,enterprise,ai,tiers,intelligenceService,workspace})){
+for(const [name,source] of Object.entries({layout,home,locations,locationClaims,reviews,reviewEvidence,qr,comms,intel,prevention,governance,enterprise,enterprisePortfolio,ai,tiers,intelligenceService,workspace})){
  if(source.includes('JSON.stringify(value??{},null,2)'))throw new Error(`${name} reintroduced raw JSON payload presentation`);
 }
 console.log('Business completion convergence audit passed.');
