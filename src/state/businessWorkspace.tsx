@@ -60,7 +60,9 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
       throw new Error('Sign in with a Business-authorized Kleenest account to continue.');
     }
 
-    const nextWorkspaces = await listBusinessWorkspaces(false);
+    // The server only includes demo workspaces here for verified platform-owner sessions.
+    // Regular Business users still receive only their own memberships.
+    const nextWorkspaces = await listBusinessWorkspaces(true);
     if (!nextWorkspaces.length) {
       setWorkspaces([]);
       setWorkspace(null);
