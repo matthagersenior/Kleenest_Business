@@ -16,6 +16,13 @@ const enterprise=requireAll('app/enterprise.tsx',['DataSummary','createEnterpris
 const ai=requireAll('src/services/ai.ts',['functions.invoke','ai-assist','Authorization','business_growth','notification_copy']);
 const tiers=requireAll('src/domain/businessTiers.ts',['advancedEngagement:growth','intelligence:growth','reporting:growth','enterpriseNetworks:enterprise']);
 const intelligenceService=requireAll('src/services/intelligence.ts',['Promise.allSettled','get_business_intelligence_authority_bundle','business_growth_cockpit','business_restroom_prevention_recommendations']);
+const auth=read('app/auth.tsx');
+const authService=read('src/services/auth.ts');
+const authCompact=(auth+'\n'+authService).replace(/\s+/g,'');
+for(const token of ['Continue with Google','signInWithOAuth','exchangeCodeForSession','Linking.createURL','Linking.openURL'])if(!(auth+'\n'+authService).includes(token))throw new Error(`Business Google auth contract missing ${token}`);
+if(!authCompact.includes("provider:'google'")&&!authCompact.includes('provider:"google"'))throw new Error('Business Google auth must use the Supabase google provider');
+if(!authCompact.includes('skipBrowserRedirect:true'))throw new Error('Business Google auth must use native browser handoff');
+if(!auth.includes('await refresh()'))throw new Error('Business Google auth must resolve authorized workspaces before entry');
 
 for(const [name,source] of Object.entries({layout,home,locations,reviews,reviewEvidence,qr,comms,intel,prevention,governance,enterprise,ai,tiers,intelligenceService})){
  if(source.includes('JSON.stringify(value??{},null,2)'))throw new Error(`${name} reintroduced raw JSON payload presentation`);
