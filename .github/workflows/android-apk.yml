@@ -83,16 +83,15 @@ jobs:
           profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-metrics
-          script: |
-            adb wait-for-device
-            adb install -r android/app/build/outputs/apk/release/app-release.apk
-            adb logcat -c
-            adb shell am force-stop com.kleenest.business
-            adb shell monkey -p com.kleenest.business -c android.intent.category.LAUNCHER 1
-            sleep 30
-            test -n "$(adb shell pidof com.kleenest.business | tr -d '\r' || true)" || (echo 'Business APK exited during startup.' >&2; adb logcat -d -v threadtime | tail -n 1200 >&2; exit 1)
-            adb shell dumpsys activity activities | grep -F com.kleenest.business >/dev/null
-            ! adb logcat -d -v threadtime | grep -E 'Process: com\.kleenest\.business|FATAL EXCEPTION.*com\.kleenest\.business|UnsatisfiedLinkError.*com\.kleenest\.business'
+          script: bash scripts/android-startup-smoke.sh android/app/build/outputs/apk/release/app-release.apk com.kleenest.business Business
+      - name: Upload Business startup diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kleenest-Business-Startup-Diagnostics
+          path: android-startup-logs
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Stage standalone APK
         run: cp android/app/build/outputs/apk/release/app-release.apk Kleenest-Business-Standalone.apk
       - uses: actions/upload-artifact@v4
