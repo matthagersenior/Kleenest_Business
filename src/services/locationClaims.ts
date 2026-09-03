@@ -1,5 +1,6 @@
 import { getSupabaseClient } from '@/lib/supabase';
 
+// Canonical claims keep Business CRUD, Consumer trust history, Fleet routing and Enterprise analytics on one location ID.
 export type ClaimableLocation = {
   id: string;
   name: string;
