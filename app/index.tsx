@@ -6,10 +6,10 @@ import { getBusinessTierCapabilities,tierLabel } from '@/domain/businessTiers';
 type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
 function readNumber(source:Record<string,unknown>|null,key:string,fallback=0){const value=source?.[key];return typeof value==='number'&&Number.isFinite(value)?value:fallback}
 
-export default function BusinessControlCenter(){
+export default function BusinessHome(){
  const{loading,refreshing,error,workspace,workspaces,access,entitlement,dashboard,refresh,selectWorkspace}=useBusinessWorkspace();
  if(loading)return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}><ActivityIndicator size="large"/></View>;
- if(error||!workspace||!access)return <View style={{flex:1,padding:24,justifyContent:'center',gap:14}}><Text style={title}>Business access required</Text><Text style={muted}>{error??'No authorized Business workspace was resolved.'}</Text><View style={row}><Link href="/auth" asChild><Action label="Sign in"/></Link><Pressable onPress={refresh} style={secondary}><Text style={secondaryText}>Retry</Text></Pressable></View></View>;
+ if(error||!workspace||!access)return <View style={{flex:1,padding:24,justifyContent:'center',gap:14}}><Text style={title}>Business access required</Text><Text style={muted}>{error??'No authorized Business workspace was resolved.'}</Text><View style={row}><Link href="/auth" replace asChild><Action label="Sign in"/></Link><Pressable onPress={refresh} style={secondary}><Text style={secondaryText}>Retry</Text></Pressable></View></View>;
  const caps=getBusinessTierCapabilities(access,entitlement),plan=tierLabel(access,entitlement);
  const metrics=[['Locations',access.location_count],['Reviews',readNumber(dashboard,'reviews')],['Check-ins',readNumber(dashboard,'check_ins')],['Redemptions',readNumber(dashboard,'redemptions')]] as const;
  return <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>} contentContainerStyle={{padding:16,paddingBottom:72,gap:16}}>
@@ -32,7 +32,7 @@ export default function BusinessControlCenter(){
   {caps.fleet?<View style={card}><Text style={heading}>Fleet</Text><Text style={muted}>This business has Fleet authority. Routing and dispatch stay in the dedicated Fleet workspace.</Text><Pressable onPress={()=>Linking.openURL('kleenest-fleet://')} style={secondary}><Text style={secondaryText}>Open Kleenest Fleet</Text></Pressable></View>:null}
 
   <View style={card}><Text style={kicker}>ADVANCED OPERATIONS</Text><View style={routeGrid}><RouteCard href="/capabilities" title="Capability Control Plane" detail="Canonical analytics and operational capabilities"/><RouteCard href="/governance" title="Governance & Trust" detail="Reporting, provenance and trust quality"/>{caps.enterprise?<RouteCard href="/enterprise-economy" title="Enterprise Economy" detail="Partner allocations, network benchmarks and ROI"/>:null}</View></View>
-  <Link href="/auth" asChild><Pressable style={secondary}><Text style={secondaryText}>Account session</Text></Pressable></Link>
+  <Link href="/auth" replace asChild><Pressable style={secondary}><Text style={secondaryText}>Account session</Text></Pressable></Link>
  </ScrollView>;
 }
 
