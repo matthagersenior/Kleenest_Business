@@ -3,7 +3,7 @@ import { ActivityIndicator,Linking,Pressable,RefreshControl,ScrollView,Text,View
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 import { getBusinessTierCapabilities,tierLabel } from '@/domain/businessTiers';
 
-type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise';
+type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise'|'/enterprise-economy';
 function readNumber(source:Record<string,unknown>|null,key:string,fallback=0){const value=source?.[key];return typeof value==='number'&&Number.isFinite(value)?value:fallback}
 function readObject(source:Record<string,unknown>|null,key:string):Record<string,unknown>{const value=source?.[key];return value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{} }
 
@@ -40,7 +40,7 @@ export default function BusinessControlCenter(){
   </Section>
 
   {caps.intelligence?<View style={{backgroundColor:'#173f2d',borderRadius:22,padding:18,gap:8}}><Text style={{color:'#c8ead7',fontWeight:'800'}}>LIVE ANALYTICS FOUNDATION</Text><Text style={{color:'white',fontSize:20,fontWeight:'900'}}>{Object.keys(summary).length} analytics event categories are active in this dashboard window.</Text><Text style={{color:'#dce9e2'}}>Growth, contributor progression, Fleet and Enterprise intelligence consume canonical events rather than parallel metrics layers.</Text></View>:null}
-  <Section title="Governance"><RouteCard href="/governance" title={caps.reporting?'Governance & Reporting':'Governance & Trust'} detail={caps.reporting?'Reporting schedules, provenance/trust quality, conflicts and service governance':'Trust quality, conflicts and provenance visibility'}/>{caps.enterpriseNetworks?<RouteCard href="/enterprise" title="Enterprise" detail="Partner networks, cross-business campaigns, outcomes and Enterprise control-plane state"/>:null}</Section>
+  <Section title="Governance"><RouteCard href="/governance" title={caps.reporting?'Governance & Reporting':'Governance & Trust'} detail={caps.reporting?'Reporting schedules, provenance/trust quality, conflicts and service governance':'Trust quality, conflicts and provenance visibility'}/>{caps.enterpriseNetworks?<><RouteCard href="/enterprise" title="Enterprise" detail="Partner networks, cross-business campaigns, outcomes and Enterprise control-plane state"/><RouteCard href="/enterprise-economy" title="Enterprise Economy" detail="Partner allocations, budget, network benchmarks, campaign ROI and attributed outcomes"/></>:null}</Section>
   <RouteCard href="/auth" title="Account session" detail="Sign in or sign out of the current Business-authorized Kleenest account"/>
  </ScrollView>
 }
