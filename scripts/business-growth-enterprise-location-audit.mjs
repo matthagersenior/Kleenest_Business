@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');
+const layout=read('app/_layout.tsx');
+const home=read('app/index.tsx');
+const tiers=read('src/domain/businessTiers.ts');
+if(!layout.includes('enterprise-location'))throw new Error('Growth Enterprise Location: route is not registered');
+if(!home.includes('Enterprise Location')||!home.includes('caps.enterpriseLocationFeatures'))throw new Error('Growth Enterprise Location: Business home does not expose the location capability');
+if(!tiers.includes('enterpriseLocationFeatures:boolean'))throw new Error('Growth Enterprise Location: capability contract is missing');
+if(!tiers.includes('enterpriseLocationFeatures:growth||enterprise'))throw new Error('Growth Enterprise Location: Growth must receive Enterprise Location features without full Enterprise network entitlement');
+if(!tiers.includes('enterpriseNetworks:enterprise'))throw new Error('Growth Enterprise Location: full Enterprise network controls must remain Enterprise-only');
+if(!fs.existsSync('app/enterprise-location.tsx'))throw new Error('Growth Enterprise Location: location operating surface is missing');
+const page=read('app/enterprise-location.tsx');
+for(const token of ['ENTERPRISE LOCATION','getGrowthIntelligenceBundle','listBusinessLocations','Location portfolio','Location intelligence','QR & engagement','Trust & operations'])if(!page.includes(token))throw new Error(`Growth Enterprise Location: operating surface missing ${token}`);
+console.log('Growth Enterprise Location audit passed: Growth gets multi-location Enterprise Location controls while Enterprise network/portfolio authority stays separately gated.');
