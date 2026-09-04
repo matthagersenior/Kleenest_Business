@@ -3,7 +3,7 @@ import { ActivityIndicator,Linking,Pressable,RefreshControl,ScrollView,Text,View
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 import { getBusinessTierCapabilities,tierLabel } from '@/domain/businessTiers';
 
-type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/intelligence'|'/governance'|'/enterprise';
+type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise';
 function readNumber(source:Record<string,unknown>|null,key:string,fallback=0){const value=source?.[key];return typeof value==='number'&&Number.isFinite(value)?value:fallback}
 function readObject(source:Record<string,unknown>|null,key:string):Record<string,unknown>{const value=source?.[key];return value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{} }
 
@@ -22,6 +22,7 @@ export default function BusinessControlCenter(){
 
   <Section title="Core workspaces">
    <FeaturedRoute href="/locations" eyebrow="STANDARD+ · MANAGEMENT" title="Business CRUD" detail="Profile, canonical locations, claims, amenities, media, team roles and public presence."/>
+   <FeaturedRoute href="/capabilities" eyebrow="SUPABASE PARITY · OPERATIONS" title="Capability Control Plane" detail="Live analytics, attribution funnels, partner programs, progression, rankings, remediation, reliability and network intelligence wired directly to canonical Supabase authority."/>
    <FeaturedRoute href="/progression" eyebrow="COMMUNITY · PROGRESSION" title="Discovery + contributor progression" detail="See discoveries, contributor XP, active campaigns and recent progression activity tied to your canonical locations."/>
    <FeaturedRoute href="/qr-studio" eyebrow="STANDARD+ · ENGAGEMENT" title="QR Studio" detail="Create, activate, style and measure canonical QR assets and check-in programs."/>
    <FeaturedRoute href="/notifications" eyebrow="STANDARD+ · COMMUNICATIONS" title="Custom Notifications" detail="Compose, target, AI-draft and send through the shared notification event pipeline."/>
