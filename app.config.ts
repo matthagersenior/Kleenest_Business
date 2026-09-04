@@ -7,6 +7,7 @@ const config: ExpoConfig = {
   slug: 'kleenest-consumer',
   version: '0.1.0',
   runtimeVersion: 'kleenest-business-0.1.0',
+  icon: './assets/app-icon.png',
   updates: {
     enabled: true,
     url: `https://u.expo.dev/${EAS_PROJECT_ID}`,
@@ -24,6 +25,7 @@ const config: ExpoConfig = {
   },
   android: {
     package: 'com.kleenest.business',
+    icon: './assets/app-icon.png',
   },
   web: {
     output: 'static',
