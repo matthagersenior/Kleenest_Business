@@ -3,7 +3,7 @@ const read=p=>fs.readFileSync(p,'utf8');
 const requireAll=(p,tokens)=>{const s=read(p);for(const t of tokens)if(!s.includes(t))throw new Error(`${p} missing functional UI contract: ${t}`);return s;};
 
 const layout=requireAll('app/_layout.tsx',['headerShown:false','Business home']);
-const home=requireAll('app/index.tsx',['Quick actions','Open QR Studio','Manage locations','Reviews & replies','Team & roles','Growth workspace','Enterprise workspace','caps.enterpriseLocationFeatures','Action({label,onPress)','LightAction({label,onPress','href="/auth" replace']);
+const home=requireAll('app/index.tsx',['Quick actions','Open QR Studio','Manage locations','Reviews & replies','Team & roles','Growth workspace','Enterprise workspace','caps.enterpriseLocationFeatures','function Action({label,onPress}','function LightAction({label,onPress','href="/auth" replace']);
 const auth=requireAll('app/auth.tsx',["router.replace('/')",'signInBusiness','await refresh()']);
 const authService=requireAll('src/services/auth.ts',['signInWithPassword','signInBusiness']);
 const enterpriseLocation=requireAll('app/enterprise-location.tsx',['Action({label,secondary=false,onPress','<Pressable onPress={onPress}']);
