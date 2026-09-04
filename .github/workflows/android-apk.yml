@@ -41,12 +41,28 @@ jobs:
         run: |
           npx expo-doctor
           rm -rf .preflight
+          test -s assets/app-icon.png
           npx expo config --type public --json > /tmp/business-expo-config.json
-          node -e "const c=require('/tmp/business-expo-config.json');if(c.android?.package!=='com.kleenest.business')process.exit(1);if(c.name!=='Kleenest Business')process.exit(1)"
+          node -e "const c=require('/tmp/business-expo-config.json');if(c.android?.package!=='com.kleenest.business')process.exit(1);if(c.name!=='Kleenest Business')process.exit(1);if(c.icon!=='./assets/app-icon.png'||c.android?.icon!=='./assets/app-icon.png')process.exit(1)"
           npx expo export --platform android --output-dir .preflight --clear
           test -n "$(find .preflight -type f -print -quit)"
       - name: Generate clean Android native project
         run: npx expo prebuild --platform android --clean
+      - name: Apply supplied Business launcher artwork
+        run: |
+          set -euo pipefail
+          test -s assets/app-icon.png
+          ICON_SHA="$(sha256sum assets/app-icon.png | awk '{print $1}')"
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            dir="android/app/src/main/res/mipmap-$density"
+            mkdir -p "$dir"
+            rm -f "$dir"/ic_launcher.png "$dir"/ic_launcher.webp "$dir"/ic_launcher_round.png "$dir"/ic_launcher_round.webp "$dir"/ic_launcher_foreground.png "$dir"/ic_launcher_foreground.webp
+            cp assets/app-icon.png "$dir/ic_launcher.png"
+            cp assets/app-icon.png "$dir/ic_launcher_round.png"
+            test "$(sha256sum "$dir/ic_launcher.png" | awk '{print $1}')" = "$ICON_SHA"
+            test "$(sha256sum "$dir/ic_launcher_round.png" | awk '{print $1}')" = "$ICON_SHA"
+          done
+          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
       - name: Ensure Android NDK 27 is valid
         shell: bash
         run: |
@@ -99,6 +115,7 @@ jobs:
           ! grep -a -q 'Development Build' /tmp/business.bundle
           unzip -l android/app/build/outputs/apk/release/app-release.apk | grep -q 'lib/arm64-v8a/libreactnative.so'
           unzip -l android/app/build/outputs/apk/release/app-release.apk | grep -q 'lib/arm64-v8a/libhermesvm.so'
+          unzip -l android/app/build/outputs/apk/release/app-release.apk | grep -Eq 'res/(mipmap|drawable).*(ic_launcher|app_icon)'
       - name: Enable KVM for x86 Android emulator
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
