@@ -7,6 +7,9 @@ on:
     paths:
       - 'app/**'
       - 'src/**'
+      - 'scripts/**'
+      - 'app.config.ts'
+      - '.github/workflows/ota-update.yml'
 
 permissions:
   contents: read
@@ -28,13 +31,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Require Expo token
-        run: test -n "$EXPO_TOKEN" || (echo "EXPO_TOKEN is not configured in Kleenest_Business repository secrets" && exit 1)
+      - name: Verify Business OTA credential
+        run: test -n "$EXPO_TOKEN" || (echo "EXPO_TOKEN is not configured in Kleenest_Business" && exit 1)
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Ensure Business OTA channel exists
+      - name: Verify Expo authentication
+        run: npx eas-cli@latest whoami --non-interactive
+      - name: Verify current Business control-center source
         run: |
-          npx eas-cli@latest channel:create business-production --branch business-production --non-interactive || \
-          npx eas-cli@latest channel:edit business-production --branch business-production --non-interactive
+          grep -q 'Business CRUD' app/index.tsx
+          grep -q 'QR Studio' app/index.tsx
+          grep -q 'Create location QR' app/qr-studio.tsx
+          grep -q 'ENTERPRISE OPERATING SYSTEM' app/enterprise.tsx
+          grep -q 'Advanced Intelligence' app/index.tsx
       - name: Publish Business OTA update
         run: npx eas-cli@latest update --channel business-production --message "Business ${GITHUB_SHA}" --non-interactive
