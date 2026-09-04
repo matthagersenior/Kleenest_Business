@@ -14,6 +14,7 @@ export type BusinessTierCapabilities={
   advancedEngagement:boolean;
   intelligence:boolean;
   reporting:boolean;
+  enterpriseLocationFeatures:boolean;
   enterpriseNetworks:boolean;
 };
 
@@ -25,7 +26,7 @@ export function getBusinessTierCapabilities(access:BusinessProductAccess|null|un
   const service=serviceTier(entitlement);
   const enterprise=Boolean(access?.enterprise_enabled)||plan==='enterprise'||service==='enterprise'||serviceFlag(entitlement,'enterprise_fleet_enabled');
   const fleet=enterprise||Boolean(access?.fleet_enabled)||plan==='fleet'||service==='fleet'||serviceFlag(entitlement,'fleet_enabled');
-  const growth=enterprise||plan==='growth'||service==='growth';
+  const growth=enterprise||plan==='growth'||service==='growth'||plan==='business_growth'||service==='business_growth';
   return{
     standard:Boolean(access),
     growth,
@@ -40,6 +41,7 @@ export function getBusinessTierCapabilities(access:BusinessProductAccess|null|un
     advancedEngagement:growth||enterprise,
     intelligence:growth||fleet||enterprise,
     reporting:growth||fleet||enterprise,
+    enterpriseLocationFeatures:growth||enterprise,
     enterpriseNetworks:enterprise,
   };
 }
