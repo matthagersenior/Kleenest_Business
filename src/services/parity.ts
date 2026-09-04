@@ -2,7 +2,6 @@ import { getSupabaseClient } from '@/lib/supabase';
 
 const client=()=>getSupabaseClient();
 function windowArgs(businessId:string,days=30){const end=new Date(),start=new Date(end.getTime()-days*86_400_000);return{p_business_id:businessId,p_start:start.toISOString(),p_end:end.toISOString()};}
-function unwrap<T>(data:T|null,error:{message:string}|null):T{if(error)throw new Error(error.message);if(data==null)throw new Error('Business capability service returned no data.');return data;}
 async function rpc(name:string,args:Record<string,unknown>={}){const{data,error}=await client().rpc(name,args);if(error)throw new Error(`${name}: ${error.message}`);return data;}
 
 export type BusinessParityBundle={
@@ -36,10 +35,11 @@ export async function getBusinessParityBundle(businessId:string,days=30):Promise
  };
 }
 
-export async function listPartnerPrograms(){return unwrap((await client().rpc('business_list_partner_programs')).data??[],(await client().rpc('business_list_partner_programs')).error);}
+export async function listPartnerPrograms(){return (await rpc('business_list_partner_programs'))??[];}
 export async function createPartnerProgram(businessId:string,name:string){return rpc('business_create_partner_program',{p_business_id:businessId,p_name:name});}
 export async function updatePartnerProgram(businessId:string,id:string,name:string,enabled:boolean){return rpc('business_update_partner_program',{p_business_id:businessId,p_partner_program_id:id,p_name:name,p_enabled:enabled});}
 export async function deletePartnerProgram(businessId:string,id:string){return rpc('business_delete_partner_program',{p_business_id:businessId,p_partner_program_id:id});}
 export async function createPartnership(businessId:string,name:string){return rpc('business_create_partnership',{p_business_id:businessId,p_name:name,p_enabled:true,p_preferred_access:false,p_match_discount_bonus:0,p_custom_perk:null});}
-export async function listPartnerships(businessId:string){return rpc('business_list_partnerships',{p_business_id:businessId});}
-export async function setPartnerEnabled(businessId:string,programId:string,enabled:boolean){return rpc('business_set_partner_enabled',{p_business_id:businessId,p_program_id:programId,p_enabled:enabled});}
+export async function listPartnerships(businessId:string){return (await rpc('business_list_partnerships',{p_business_id:businessId}))??[];}
+export async function updatePartnership(businessId:string,id:string,input:{name:string;enabled:boolean;preferredAccess?:boolean;matchDiscountBonus?:number;customPerk?:string|null}){return rpc('business_update_partnership',{p_business_id:businessId,p_partnership_id:id,p_name:input.name,p_enabled:input.enabled,p_preferred_access:input.preferredAccess??false,p_match_discount_bonus:input.matchDiscountBonus??0,p_custom_perk:input.customPerk??null});}
+export async function deletePartnership(businessId:string,id:string){return rpc('business_delete_partnership',{p_business_id:businessId,p_partnership_id:id});}
