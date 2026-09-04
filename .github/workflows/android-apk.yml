@@ -60,11 +60,12 @@ jobs:
           for attempt in 1 2 3; do
             echo "Installing NDK $NDK_VERSION (attempt $attempt/3)..."
             rm -rf "$NDK_DIR" "$ANDROID_SDK_ROOT/.temp" "$ANDROID_SDK_ROOT/temp" || true
-            if { yes || true; } | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION"; then
-              if [ -s "$NDK_DIR/source.properties" ]; then
-                grep -E 'Pkg.Revision|Pkg.Desc' "$NDK_DIR/source.properties" || true
-                exit 0
-              fi
+            set +o pipefail
+            yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" || true
+            set -o pipefail
+            if [ -s "$NDK_DIR/source.properties" ]; then
+              grep -E 'Pkg.Revision|Pkg.Desc' "$NDK_DIR/source.properties" || true
+              exit 0
             fi
             sleep $((attempt * 5))
           done
