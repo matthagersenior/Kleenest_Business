@@ -1,7 +1,7 @@
 import { useCallback,useEffect,useState } from 'react';
 import { ActivityIndicator,Pressable,RefreshControl,ScrollView,Text,TextInput,View } from 'react-native';
 import { DataSummary } from '@/components/DataSummary';
-import { createPartnerProgram,createPartnership,deletePartnerProgram,getBusinessParityBundle,listPartnerPrograms,listPartnerships,setPartnerEnabled,updatePartnerProgram,type BusinessParityBundle } from '@/services/parity';
+import { createPartnerProgram,createPartnership,deletePartnerProgram,deletePartnership,getBusinessParityBundle,listPartnerPrograms,listPartnerships,updatePartnerProgram,updatePartnership,type BusinessParityBundle } from '@/services/parity';
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 
 type Row=Record<string,unknown>;
@@ -37,7 +37,7 @@ export default function BusinessCapabilities(){
 
   <Section title="Partnerships" subtitle="Business-to-business partner relationships that feed preferred access and network intelligence">
    <View style={card}><TextInput value={partnershipName} onChangeText={setPartnershipName} style={input}/><Action disabled={Boolean(busy)||!partnershipName.trim()} label="Create partnership" onPress={()=>run('partnership:create',()=>createPartnership(workspace.business_id,partnershipName.trim()))}/></View>
-   {partnerships.length?partnerships.map((p,i)=>{const id=idOf(p),enabled=p.enabled!==false;return <View key={id||String(i)} style={card}><Text style={heading}>{label(p)}</Text><Text style={muted}>{enabled?'Enabled':'Disabled'} · {String(p.custom_perk??'No custom perk')}</Text>{id?<Action secondary label={enabled?'Disable linked program':'Enable linked program'} onPress={()=>run(`partnership:${id}`,()=>setPartnerEnabled(workspace.business_id,id,!enabled))}/>:null}</View>}):<Text style={muted}>No direct partnerships yet.</Text>}
+   {partnerships.length?partnerships.map((p,i)=>{const id=idOf(p),enabled=p.enabled!==false;return <View key={id||String(i)} style={card}><Text style={heading}>{label(p)}</Text><Text style={muted}>{enabled?'Enabled':'Disabled'} · {String(p.custom_perk??'No custom perk')}</Text><View style={row}>{id?<Action secondary label={enabled?'Disable':'Enable'} onPress={()=>run(`partnership:${id}`,()=>updatePartnership(workspace.business_id,id,{name:label(p),enabled:!enabled,preferredAccess:Boolean(p.preferred_access),matchDiscountBonus:Number(p.match_discount_bonus??0),customPerk:p.custom_perk==null?null:String(p.custom_perk)}))}/>:null}{id?<Action secondary label="Delete" onPress={()=>run(`partnership:delete:${id}`,()=>deletePartnership(workspace.business_id,id))}/>:null}</View></View>}):<Text style={muted}>No direct partnerships yet.</Text>}
   </Section>
  </ScrollView>;
 }
