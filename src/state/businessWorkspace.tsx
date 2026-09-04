@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import {
   getBusinessDashboardSummary,
   getBusinessManagementContext,
@@ -25,6 +26,7 @@ type WorkspaceState = {
 };
 
 const BusinessWorkspaceContext = createContext<WorkspaceState | null>(null);
+const WORKSPACE_KEY = 'kleenest.business.selected_workspace';
 
 async function loadWorkspaceData(workspace: BusinessWorkspace) {
   const [access, entitlement, management, dashboard] = await Promise.all([
@@ -60,8 +62,6 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
       throw new Error('Sign in with a Business-authorized Kleenest account to continue.');
     }
 
-    // The server only includes demo workspaces here for verified platform-owner sessions.
-    // Regular Business users still receive only their own memberships.
     const nextWorkspaces = await listBusinessWorkspaces(true);
     if (!nextWorkspaces.length) {
       setWorkspaces([]);
@@ -70,7 +70,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
     }
 
     const nextWorkspace =
-      nextWorkspaces.find((candidate) => candidate.business_id === preferredBusinessId) ??
+      nextWorkspaces.find(candidate => candidate.business_id === preferredBusinessId) ??
       nextWorkspaces[0];
     const detail = await loadWorkspaceData(nextWorkspace);
     setWorkspaces(nextWorkspaces);
@@ -79,12 +79,18 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
     setEntitlement(detail.entitlement);
     setManagement(detail.management);
     setDashboard(detail.dashboard);
+    await SecureStore.setItemAsync(WORKSPACE_KEY, nextWorkspace.business_id).catch(() => {});
   }, []);
 
   useEffect(() => {
-    hydrate()
-      .catch((cause: unknown) => setError(cause instanceof Error ? cause.message : String(cause)))
-      .finally(() => setLoading(false));
+    let mounted = true;
+    (async () => {
+      const preferred = await SecureStore.getItemAsync(WORKSPACE_KEY).catch(() => null);
+      await hydrate(preferred ?? undefined);
+    })()
+      .catch((cause: unknown) => { if (mounted) setError(cause instanceof Error ? cause.message : String(cause)); })
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
   }, [hydrate]);
 
   const refresh = useCallback(async () => {
@@ -102,6 +108,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
     async (businessId: string) => {
       setRefreshing(true);
       try {
+        await SecureStore.setItemAsync(WORKSPACE_KEY, businessId);
         await hydrate(businessId);
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : String(cause));
@@ -113,19 +120,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
   );
 
   const value = useMemo(
-    () => ({
-      loading,
-      refreshing,
-      error,
-      workspace,
-      workspaces,
-      access,
-      entitlement,
-      management,
-      dashboard,
-      refresh,
-      selectWorkspace,
-    }),
+    () => ({ loading, refreshing, error, workspace, workspaces, access, entitlement, management, dashboard, refresh, selectWorkspace }),
     [loading, refreshing, error, workspace, workspaces, access, entitlement, management, dashboard, refresh, selectWorkspace],
   );
 
