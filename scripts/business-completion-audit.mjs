@@ -2,14 +2,16 @@ import fs from 'node:fs';
 const read=p=>fs.readFileSync(p,'utf8');
 const requireAll=(p,tokens)=>{const s=read(p);for(const t of tokens)if(!s.includes(t))throw new Error(`${p} missing Business completion contract: ${t}`);return s;};
 
-const layout=requireAll('app/_layout.tsx',['assistant','qr-studio','notifications','intelligence','capabilities','enterprise','enterprise-economy']);
-const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Engagement','Trust operations','Business profile','Notifications','Kleenest AI','Intelligence','Capability control plane','Enterprise command','optional Fleet handoff']);
+const layout=requireAll('app/_layout.tsx',['assistant','qr-studio','notifications','intelligence','capabilities','enterprise','enterprise-economy','live-network']);
+const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Engagement','Trust operations','Business profile','Notifications','Kleenest AI','Intelligence','Capability control plane','Enterprise command','optional Fleet handoff','Live Network']);
 const locations=requireAll('app/locations.tsx',['listBusinessLocations','createBusinessLocation','updateBusinessLocation','Find & claim existing','requestLocationClaim','searchClaimableLocations','ready for map/Fleet routing']);
 const locationClaims=requireAll('src/services/locationClaims.ts',['business_search_claimable_locations','business_list_location_claims','claim_location_for_business']);
 const reviews=requireAll('src/services/business.ts',['business_review_detail','business_reply_review']);
 const reviewEvidence=requireAll('src/services/reviews.ts',['mobile_review_evidence','mobile_location_review_evidence','mobile_review_photos_for_reviews']);
 const qr=requireAll('app/qr-studio.tsx',['listQrStudioAssets','createCustomBusinessQr','setQrActive','updateCustomBusinessQr','createQrEngagementProgram','listQrStudioTemplates','listQrStudioVersions','restoreQrStudioVersion','deleteBusinessQr']);
 const comms=requireAll('app/notifications.tsx',['business_custom','sendBusinessNotification','runBusinessAi','notification_copy']);
+const liveNetwork=requireAll('app/live-network.tsx',['Live Network','enableLiveNetwork','disableLiveNetwork','getLiveNetworkStatus','registerLiveNetworkPush']);
+const liveNetworkService=requireAll('src/services/liveNetwork.ts',['expo-location','expo-task-manager','expo-notifications','business_live_network_manifest','record_geofence_event','register_notification_native_push_token','startGeofencingAsync','stopGeofencingAsync']);
 const intel=requireAll('app/intelligence.tsx',['getGrowthIntelligenceBundle','ADVANCED INTELLIGENCE','Ask Kleenest AI']);
 const prevention=requireAll('app/prevention.tsx',['execution → verification','Fleet handoff attached','Promise.allSettled']);
 const governance=requireAll('app/governance.tsx',['DataSummary','runDueReportingSchedules','buildGovernanceReport']);
@@ -23,6 +25,9 @@ const ai=requireAll('src/services/ai.ts',['functions.invoke','ai-assist','Author
 const tiers=requireAll('src/domain/businessTiers.ts',['advancedEngagement:growth','intelligence:growth','reporting:growth','enterpriseNetworks:enterprise']);
 const intelligenceService=requireAll('src/services/intelligence.ts',['Promise.allSettled','get_business_intelligence_authority_bundle','business_growth_cockpit','business_restroom_prevention_recommendations']);
 const workspace=requireAll('src/state/businessWorkspace.tsx',['getBusinessProductAccess','selectWorkspace','business_id']);
+const config=requireAll('app.config.ts',["android.permission.RECORD_AUDIO","android.permission.SYSTEM_ALERT_WINDOW","expo-location","expo-notifications","microphonePermission: false","ACCESS_BACKGROUND_LOCATION","UIBackgroundModes"]);
+const pkg=JSON.parse(read('package.json'));
+for(const [dep,version] of Object.entries({'expo-location':'~57.0.14','expo-notifications':'~57.0.15','expo-task-manager':'~57.0.15'}))if(pkg.dependencies?.[dep]!==version)throw new Error(`Business Live Network dependency ${dep} must be ${version}`);
 const auth=read('app/auth.tsx');
 const authService=read('src/services/auth.ts');
 const authCompact=(auth+'\n'+authService).replace(/\s+/g,'');
@@ -30,8 +35,9 @@ for(const token of ['Continue with Google','signInWithOAuth','exchangeCodeForSes
 if(!authCompact.includes("provider:'google'")&&!authCompact.includes('provider:"google"'))throw new Error('Business Google auth must use the Supabase google provider');
 if(!authCompact.includes('skipBrowserRedirect:true'))throw new Error('Business Google auth must use native browser handoff');
 if(!auth.includes('await refresh()'))throw new Error('Business Google auth must resolve authorized workspaces before entry');
+if(!config.includes('blockedPermissions'))throw new Error('Business must explicitly block microphone and overlay permissions that are unrelated to Live Network geofencing');
 
-for(const [name,source] of Object.entries({layout,home,locations,locationClaims,reviews,reviewEvidence,qr,comms,intel,prevention,governance,enterprise,enterpriseEconomy,enterpriseService,enterprisePortfolio,capabilityUi,capabilityService,ai,tiers,intelligenceService,workspace})){
+for(const [name,source] of Object.entries({layout,home,locations,locationClaims,reviews,reviewEvidence,qr,comms,liveNetwork,liveNetworkService,intel,prevention,governance,enterprise,enterpriseEconomy,enterpriseService,enterprisePortfolio,capabilityUi,capabilityService,ai,tiers,intelligenceService,workspace})){
  if(source.includes('JSON.stringify(value??{},null,2)'))throw new Error(`${name} reintroduced raw JSON payload presentation`);
 }
-console.log('Business completion convergence audit passed with canonical workspace navigation and hardened Supabase-to-UI parity coverage, including Enterprise economy authority.');
+console.log('Business completion convergence audit passed with canonical workspace navigation, Live Network, permission hardening and hardened Supabase-to-UI parity coverage, including Enterprise economy authority.');
