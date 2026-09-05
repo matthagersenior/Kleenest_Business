@@ -1,10 +1,10 @@
 import type { ExpoConfig } from 'expo/config';
 
-const EAS_PROJECT_ID = '22a65aa3-c615-4c4f-a34d-084babc28fd7';
+const EAS_PROJECT_ID = '15ac343b-81bf-459b-8c25-1b2fc8b293de';
 
 const config: ExpoConfig = {
   name: 'Kleenest Business',
-  slug: 'kleenest-consumer',
+  slug: 'kleenest-business',
   version: '0.1.0',
   runtimeVersion: 'kleenest-business-0.1.0',
   icon: './assets/app-icon.png',
