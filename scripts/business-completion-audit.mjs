@@ -3,7 +3,7 @@ const read=p=>fs.readFileSync(p,'utf8');
 const requireAll=(p,tokens)=>{const s=read(p);for(const t of tokens)if(!s.includes(t))throw new Error(`${p} missing Business completion contract: ${t}`);return s;};
 
 const layout=requireAll('app/_layout.tsx',['assistant','qr-studio','notifications','intelligence','capabilities','enterprise','enterprise-economy']);
-const home=requireAll('app/index.tsx',['Business CRUD','QR Studio','Custom Notifications','Kleenest AI','Advanced Intelligence','Capability Control Plane','Enterprise Economy','optional Fleet handoff']);
+const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Engagement','Trust operations','Business profile','Notifications','Kleenest AI','Intelligence','Capability control plane','Enterprise command','optional Fleet handoff']);
 const locations=requireAll('app/locations.tsx',['listBusinessLocations','createBusinessLocation','updateBusinessLocation','Find & claim existing','requestLocationClaim','searchClaimableLocations','ready for map/Fleet routing']);
 const locationClaims=requireAll('src/services/locationClaims.ts',['business_search_claimable_locations','business_list_location_claims','claim_location_for_business']);
 const reviews=requireAll('src/services/business.ts',['business_review_detail','business_reply_review']);
@@ -34,4 +34,4 @@ if(!auth.includes('await refresh()'))throw new Error('Business Google auth must 
 for(const [name,source] of Object.entries({layout,home,locations,locationClaims,reviews,reviewEvidence,qr,comms,intel,prevention,governance,enterprise,enterpriseEconomy,enterpriseService,enterprisePortfolio,capabilityUi,capabilityService,ai,tiers,intelligenceService,workspace})){
  if(source.includes('JSON.stringify(value??{},null,2)'))throw new Error(`${name} reintroduced raw JSON payload presentation`);
 }
-console.log('Business completion convergence audit passed with hardened Supabase-to-UI parity coverage, including Enterprise economy authority.');
+console.log('Business completion convergence audit passed with canonical workspace navigation and hardened Supabase-to-UI parity coverage, including Enterprise economy authority.');
