@@ -38,6 +38,23 @@ async function loadWorkspaceData(workspace: BusinessWorkspace) {
   return { access, entitlement, management, dashboard };
 }
 
+async function chooseStartupWorkspace(workspaces: BusinessWorkspace[], preferredBusinessId?: string) {
+  const ranked = await Promise.all(workspaces.map(async candidate => {
+    try {
+      const access = await getBusinessProductAccess(candidate.business_id);
+      const planWeight = access.enterprise_enabled ? 30 : access.fleet_enabled ? 20 : access.plan === 'growth' ? 10 : 0;
+      const operationalScore = Math.max(0, Number(access.location_count || 0)) * 100 + planWeight + (candidate.is_demo_test ? 0 : 5);
+      return { candidate, access, operationalScore };
+    } catch {
+      return { candidate, access: null as BusinessProductAccess | null, operationalScore: -1 };
+    }
+  }));
+  const preferred = ranked.find(item => item.candidate.business_id === preferredBusinessId);
+  if (preferred?.access && Number(preferred.access.location_count || 0) > 0) return preferred.candidate;
+  ranked.sort((a, b) => b.operationalScore - a.operationalScore);
+  return ranked[0]?.candidate ?? workspaces[0];
+}
+
 export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -49,7 +66,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
   const [management, setManagement] = useState<Record<string, unknown> | null>(null);
   const [dashboard, setDashboard] = useState<Record<string, unknown> | null>(null);
 
-  const hydrate = useCallback(async (preferredBusinessId?: string) => {
+  const hydrate = useCallback(async (preferredBusinessId?: string, forcePreferred = false) => {
     setError(null);
     const session = await getCurrentSession();
     if (!session) {
@@ -69,9 +86,10 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
       throw new Error('This account does not have an active Business workspace.');
     }
 
-    const nextWorkspace =
-      nextWorkspaces.find(candidate => candidate.business_id === preferredBusinessId) ??
-      nextWorkspaces[0];
+    const explicitlyPreferred = nextWorkspaces.find(candidate => candidate.business_id === preferredBusinessId);
+    const nextWorkspace = forcePreferred && explicitlyPreferred
+      ? explicitlyPreferred
+      : await chooseStartupWorkspace(nextWorkspaces, preferredBusinessId);
     const detail = await loadWorkspaceData(nextWorkspace);
     setWorkspaces(nextWorkspaces);
     setWorkspace(nextWorkspace);
@@ -86,7 +104,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
     let mounted = true;
     (async () => {
       const preferred = await SecureStore.getItemAsync(WORKSPACE_KEY).catch(() => null);
-      await hydrate(preferred ?? undefined);
+      await hydrate(preferred ?? undefined, false);
     })()
       .catch((cause: unknown) => { if (mounted) setError(cause instanceof Error ? cause.message : String(cause)); })
       .finally(() => { if (mounted) setLoading(false); });
@@ -96,7 +114,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
   const refresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await hydrate(workspace?.business_id);
+      await hydrate(workspace?.business_id, true);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -109,7 +127,7 @@ export function BusinessWorkspaceProvider({ children }: PropsWithChildren) {
       setRefreshing(true);
       try {
         await SecureStore.setItemAsync(WORKSPACE_KEY, businessId);
-        await hydrate(businessId);
+        await hydrate(businessId, true);
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : String(cause));
       } finally {
