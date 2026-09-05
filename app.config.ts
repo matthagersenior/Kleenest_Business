@@ -1,6 +1,12 @@
 import type { ExpoConfig } from 'expo/config';
 
-const EAS_PROJECT_ID = '15ac343b-81bf-459b-8c25-1b2fc8b293de';
+const EXPECTED_EAS_PROJECT_ID = '15ac343b-81bf-459b-8c25-1b2fc8b293de';
+const configuredEasProjectId = process.env.EAS_PROJECT_ID;
+if (configuredEasProjectId && configuredEasProjectId !== EXPECTED_EAS_PROJECT_ID) {
+  throw new Error(`[Kleenest Business] EAS_PROJECT_ID drift detected. Expected ${EXPECTED_EAS_PROJECT_ID}, received ${configuredEasProjectId}.`);
+}
+const EAS_PROJECT_ID = configuredEasProjectId || EXPECTED_EAS_PROJECT_ID;
+const otaChannel = process.env.EXPO_PUBLIC_OTA_CHANNEL || 'business-production';
 
 const config: ExpoConfig = {
   name: 'Kleenest Business',
@@ -13,7 +19,7 @@ const config: ExpoConfig = {
     url: `https://u.expo.dev/${EAS_PROJECT_ID}`,
     checkAutomatically: 'ON_LOAD',
     fallbackToCacheTimeout: 0,
-    requestHeaders: { 'expo-channel-name': 'business-production' },
+    requestHeaders: { 'expo-channel-name': otaChannel },
   },
   orientation: 'portrait',
   scheme: 'kleenest-business',
@@ -62,7 +68,7 @@ const config: ExpoConfig = {
   },
   extra: {
     appRole: 'business',
-    otaChannel: 'business-production',
+    otaChannel,
     supabaseProjectRef: 'ssgesjzdvdsqacdtasje',
     eas: { projectId: EAS_PROJECT_ID },
   },
