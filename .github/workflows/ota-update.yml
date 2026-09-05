@@ -34,7 +34,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
       - name: Verify Business OTA credential
         run: test -n "$EXPO_TOKEN" || (echo "EXPO_TOKEN is not configured in Kleenest_Business" && exit 1)
       - name: Install dependencies
