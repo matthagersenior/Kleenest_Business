@@ -3,7 +3,7 @@ const read=p=>fs.readFileSync(p,'utf8');
 const requireAll=(p,tokens)=>{const s=read(p);for(const t of tokens)if(!s.includes(t))throw new Error(`${p} missing functional UI contract: ${t}`);return s;};
 
 const layout=requireAll('app/_layout.tsx',['headerShown:false','Business home']);
-const home=requireAll('app/index.tsx',['Quick actions','Open QR Studio','Manage locations','Reviews & replies','Team & roles','Growth workspace','Enterprise workspace','caps.enterpriseLocationFeatures','function Action({label,onPress}','function LightAction({label,onPress','href="/auth" replace']);
+const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Engagement','Trust operations','Enterprise command','caps.enterpriseLocationFeatures','function Action({label,onPress}','function LightAction({label,onPress','href="/auth" replace']);
 const auth=requireAll('app/auth.tsx',["router.replace('/')",'signInBusiness','await refresh()']);
 const authService=requireAll('src/services/auth.ts',['signInWithPassword','signInBusiness']);
 const enterpriseLocation=requireAll('app/enterprise-location.tsx',['Action({label,secondary=false,onPress','<Pressable onPress={onPress}']);
@@ -14,4 +14,4 @@ for(const [name,source] of Object.entries({home,enterpriseLocation}))if(source.i
 if(home.includes('<Link href="/auth" asChild>'))throw new Error('Business home must replace, not push, the auth route or post-login navigation duplicates the home screen');
 if(!auth.includes("router.replace('/')"))throw new Error('Business auth must replace itself with the Business home after successful authorization');
 if(!authService.includes('signInWithPassword'))throw new Error('Business password auth service is not wired to Supabase password sign-in');
-console.log('Business UI functional audit passed, including single-home post-login navigation.');
+console.log('Business UI functional audit passed with one canonical destination per primary business job.');
