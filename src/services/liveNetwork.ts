@@ -8,7 +8,7 @@ import { getSupabaseClient } from '@/lib/supabase';
 export const BUSINESS_GEOFENCE_TASK='kleenest-business-live-network-geofence';
 const APP_ID='com.kleenest.business';
 
-type ManifestRow={geofence_id:string;business_id:string;location_id:string;radius_meters:number;notification_enabled:boolean;active:boolean;location_name:string|null;latitude:number;longitude:number};
+export type ManifestRow={geofence_id:string;business_id:string;location_id:string;radius_meters:number;notification_enabled:boolean;active:boolean;location_name:string|null;latitude:number;longitude:number;address?:string|null;city?:string|null;state?:string|null};
 
 function decodeIdentifier(identifier:string){const [geofenceId,businessId,locationId]=identifier.split('|');return {geofenceId,businessId,locationId};}
 
@@ -30,10 +30,25 @@ if(!TaskManager.isTaskDefined(BUSINESS_GEOFENCE_TASK)){
   });
 }
 
+export async function ensureLiveNetworkGeofences(businessId:string,radiusMeters=150){
+  const {data,error}=await getSupabaseClient().rpc('business_ensure_live_network_geofences',{p_business_id:businessId,p_radius_meters:radiusMeters});
+  if(error)throw new Error(error.message);
+  return data as {touched?:number;manifest?:ManifestRow[]}|null;
+}
+
 export async function listLiveNetworkManifest(businessId:string):Promise<ManifestRow[]>{
   const {data,error}=await getSupabaseClient().rpc('business_live_network_manifest',{p_business_id:businessId});
   if(error)throw new Error(error.message);
   return (Array.isArray(data)?data:[]) as ManifestRow[];
+}
+
+export async function configureLiveNetworkGeofence(geofenceId:string,input:{radiusMeters:number;notificationEnabled:boolean;active:boolean}){
+  const {data,error}=await getSupabaseClient().rpc('configure_business_geofence',{
+    p_geofence_id:geofenceId,p_radius_meters:input.radiusMeters,p_notification_enabled:input.notificationEnabled,
+    p_notification_payload:{title:'Kleenest Live Network',body:'Live location activity is available for this business location.'},p_active:input.active
+  });
+  if(error)throw new Error(error.message);
+  return data;
 }
 
 export async function getLiveNetworkStatus(){
@@ -60,8 +75,9 @@ export async function enableLiveNetwork(businessId:string){
   if(foreground.status!=='granted')throw new Error('Precise location permission is required to enable Live Network geofences.');
   const background=await Location.requestBackgroundPermissionsAsync();
   if(background.status!=='granted')throw new Error('Background location permission is required for Live Network alerts when Business is not open.');
+  await ensureLiveNetworkGeofences(businessId);
   const manifest=await listLiveNetworkManifest(businessId);
-  if(!manifest.length)throw new Error('No active Business geofences with coordinates are configured yet.');
+  if(!manifest.length)throw new Error('No active Business locations with coordinates are available for Live Network yet.');
   const maximum=Platform.OS==='ios'?20:100;
   const regions=manifest.slice(0,maximum).map(row=>({
     identifier:`${row.geofence_id}|${row.business_id}|${row.location_id}`,
