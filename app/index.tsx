@@ -3,7 +3,7 @@ import { ActivityIndicator,Linking,Pressable,RefreshControl,ScrollView,Text,View
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 import { getBusinessTierCapabilities,tierLabel } from '@/domain/businessTiers';
 
-type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/live-network'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
+type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-designer'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/live-network'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
 function readNumber(source:Record<string,unknown>|null,key:string,fallback=0){const value=source?.[key];return typeof value==='number'&&Number.isFinite(value)?value:fallback}
 
 export default function BusinessHome(){
@@ -24,7 +24,7 @@ export default function BusinessHome(){
   <View style={card}><Text style={kicker}>RUN THE BUSINESS</Text><Text style={heading}>Your operating workspaces</Text><Text style={muted}>Each job has one home. No duplicate routes and no hunting through overlapping control-center sections.</Text><View style={workspaceGrid}>
     <WorkspaceCard href="/locations" kicker="PLACES" title="Locations" detail="Claim, add, edit and operate every canonical location."/>
     <WorkspaceCard href="/reviews" kicker="CUSTOMERS" title="Reviews & replies" detail="Customer evidence, ratings, replies and review operations."/>
-    <WorkspaceCard href="/qr-studio" kicker="ON-SITE" title="QR Studio" detail="Check-ins, attributed actions, templates and QR lifecycle."/>
+    <WorkspaceCard href="/qr-designer" kicker="ON-SITE" title="QR Studio" detail="Visual design, logos, branded appearance, scan safety, templates and stable-code QR lifecycle."/>
     <WorkspaceCard href="/live-network" kicker="LIVE" title="Live Network" detail="Geofences, background location signals and operational notification delivery."/>
     <WorkspaceCard href="/members" kicker="PEOPLE" title="Team & roles" detail="Membership, permissions and business authority."/>
     <WorkspaceCard href="/engagement" kicker="GROW" title="Engagement" detail="Campaigns, promotions, events and customer activation."/>
