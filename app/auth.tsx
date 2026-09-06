@@ -6,7 +6,7 @@ import { getSupabaseClient } from '@/lib/supabase';
 import { signInBusiness,signOutBusiness } from '@/services/auth';
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 
-const googleRedirect='kleenest-business://auth';
+const googleRedirect=Linking.createURL('auth',{scheme:'kleenest-business'});
 
 export default function BusinessAuthScreen(){
  const { refresh } = useBusinessWorkspace();
