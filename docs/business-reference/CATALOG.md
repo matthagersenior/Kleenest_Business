@@ -191,3 +191,33 @@ See [SOURCE_LINKS.md](./SOURCE_LINKS.md) for durable Drive URLs.
 
 - **AGC of Missouri — Emerging Supplier / Service Provider 2026** (`MemberApp_EmergingSupplierServiceProvider2026.pdf`) — membership/channel document received during Kleenest outreach; normalized at [research/agc-missouri-emerging-provider-2026.md](./research/agc-missouri-emerging-provider-2026.md).
 - Gmail attachment sweep found 74 Kleenest-related attachment-bearing messages; the only other recurring substantive Kleenest attachments were `Kleenest_STL_Pilot_Deck_fixed_v2.pdf` and `Kleenest_Business_Plan_Executive_Summary_v6.pdf`, already represented in this catalog.
+
+## Deep-audit additions — September 2026
+
+### Newly identified archive packs / variants
+- Kleenest_Updated_Everything_v9.zip
+- Kleenest_Four_Seasons_Specific_Offer_v10.zip
+- Kleenest_Four_Seasons_Custom_Value_Pack_v9.zip
+- Kleenest_Updated_Cortex_Four_Seasons_Materials_v8.zip
+- Kleenest_Updated_Everything_v7.zip
+- Kleenest_Updated_Business_Plan_Financials_Outreach_v7.zip
+- Kleenest_STL_Pilot_Deck_fixed.pdf — pre-v2 corrected PDF variant
+
+### Newly identified QA / visual assets
+- Kleenest_Four_Seasons_Corrected_QR_Card_v10.png
+- Kleenest_Four_Seasons_Value_Model_v9_QA.png
+- fs_v9_montage.png
+- cortex_v8_montage.png
+- montage_v7_outreach.png
+- Kleenest_v7_Financial_Dashboard_QA.png
+- Kleenest_v7_Enterprise_Pricing_QA.png
+- montage_v6_outreach.png
+- kleenest_pilot_montage.png
+
+### Recovered historical strategy sources
+- Kleenest Mission Statement (1).pdf — normalized at [archive/mission-and-economic-engine-2026-08-19.md](./archive/mission-and-economic-engine-2026-08-19.md); configuration strings intentionally omitted.
+- Kleenest app .pdf — 106-page historical platform/business-intelligence source normalized at [archive/platform-intelligence-business-strategy-2026-08-19.md](./archive/platform-intelligence-business-strategy-2026-08-19.md).
+- April 2025 Google Drive cluster — seven unique documents preserved under [archive/2025-drive/](./archive/2025-drive/README.md).
+
+### Referenced but not separately recovered
+The April 2025 Improvement Review names older materials called **Realistic, Gold, Diamond, Pitch Deck Slides, Visuals, and Market Research Proof of Concept**. A direct Drive search found references to those names but no separate surviving source files. They are recorded as historical references, not claimed as recovered artifacts.
