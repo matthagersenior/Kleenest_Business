@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "name": "Kleenest Business Data Room",
+  "status": "active",
+  "source_of_truth": "docs/data-room/SOURCE_OF_TRUTH.md",
+  "current": [
+    "docs/business-reference/current/business-plan-v9.md",
+    "docs/business-reference/current/executive-summary-v9.md",
+    "docs/business-reference/current/financial-model-v9.md",
+    "docs/business-reference/current/outreach-plan-v9.md",
+    "docs/business-reference/current/meeting-playbook-v9.md",
+    "docs/business-reference/current/cortex-sq1-v9.md",
+    "docs/business-reference/current/four-seasons-offer-v10.md",
+    "docs/business-reference/current/market-evidence-and-sizing.md",
+    "docs/business-reference/current/target-intel-index.md"
+  ],
+  "validation": [
+    "docs/business-reference/validation/sq1-founder-prep-v1.md",
+    "docs/business-reference/validation/stl-pilot-outreach-v1.md",
+    "docs/business-reference/validation/skandalaris-workshop-pack.md",
+    "docs/business-reference/validation/opportunity-readiness-and-funding.md",
+    "docs/business-reference/validation/target-materials-manifest.md"
+  ],
+  "research": [
+    "docs/business-reference/research/independent-market-competitive-analysis-2026-08-28.md",
+    "docs/business-reference/research/agc-missouri-emerging-provider-2026.md"
+  ],
+  "archive": [
+    "docs/business-reference/archive/HISTORICAL_MATERIALS.md",
+    "docs/business-reference/archive/early-sales-pilot-and-prototype-materials.md",
+    "docs/business-reference/PACKS_AND_ARCHIVES.md"
+  ],
+  "operational_views": [
+    "docs/data-room/INVESTOR_VIEW.md",
+    "docs/data-room/PILOT_PARTNER_VIEW.md",
+    "docs/data-room/DILIGENCE_CHECKLIST.md",
+    "docs/data-room/TARGET_MATERIALS.md",
+    "docs/data-room/ARCHIVE_POLICY.md"
+  ],
+  "claim_rules": {
+    "ingested_locations_are_traction": false,
+    "imported_businesses_are_customers": false,
+    "seeded_demo_data_is_traction": false,
+    "partner_label_requires_explicit_evidence": true,
+    "accessibility_certification_requires_authoritative_source": true,
+    "time_sensitive_market_claims_require_reverification": true
+  }
+}
