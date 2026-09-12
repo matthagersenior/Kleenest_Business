@@ -63,3 +63,8 @@ For every Business implementation wave:
 3. implement the Business runtime in `Kleenest_Business`;
 4. preserve shared backend identifiers, authorization semantics and event/data contracts so Business and Production operate on the same Kleenest network;
 5. place Enterprise Business capabilities in this repository behind Growth/Enterprise entitlement gates as appropriate.
+
+
+## Business reference library
+
+Business, market, financial, pitch, research, pilot, outreach, and partner-reference material is consolidated under [`docs/business-reference/`](./docs/business-reference/README.md). The reference library separates current v9/v10 strategy from historical versions and does not replace the canonical product/service contracts in `Kleenest_Architecture/main`.
