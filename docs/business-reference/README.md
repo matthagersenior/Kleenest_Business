@@ -63,3 +63,11 @@ These materials preserve Business Model Canvas work, customer hypotheses/intervi
 For audience-specific diligence and current-use navigation, start with the [Kleenest Business Data Room](../data-room/README.md).
 
 The reference library preserves source history; the data room determines what should be used now.
+
+## Deep historical archive
+
+The exhaustive audit also recovered older strategy that predates the versioned 2026 packs:
+- [April 2025 Drive archive](./archive/2025-drive/README.md)
+- [Mission & Economic Engine — August 2026](./archive/mission-and-economic-engine-2026-08-19.md)
+- [Location-Intelligence & Business Platform Strategy — August 2026](./archive/platform-intelligence-business-strategy-2026-08-19.md)
+- [Deep Audit Report](./DEEP_AUDIT_2026-09-11.md)
