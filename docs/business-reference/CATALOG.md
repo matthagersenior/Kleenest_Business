@@ -107,7 +107,7 @@ Duplicate Library copies of several of these also exist; the newest copy should 
 - Kleenest Community App Marketing Collage.png
 
 ## Other company / product reference
-- Kleenest Mission Statement (1).pdf
+- Kleenest Mission Statement  (1).pdf
 - Kleenest app .pdf
 
 ## Drive working documents
@@ -163,7 +163,8 @@ See [SOURCE_LINKS.md](./SOURCE_LINKS.md) for durable Drive URLs.
 - Kleenest_Detailed_Financial_Model_v8.xlsx
 - Kleenest_Four_Seasons_Specific_Offer_v10.pptx
 - Kleenest_Four_Seasons_Materials_v8.pptx
-- Kleenest_Cortex_SQ1_Prep_v4.pptx / .pdf
+- Kleenest_Cortex_SQ1_Prep_v4.pptx
+- Kleenest_Cortex_SQ1_Prep_v4.pdf
 - Kleenest_Four_Seasons_Pilot_v4.pptx / .pdf
 - Kleenest_Outreach_Workbook_QA_v6.png
 
@@ -174,6 +175,7 @@ See [SOURCE_LINKS.md](./SOURCE_LINKS.md) for durable Drive URLs.
 - Kleenest_Consumer_First_Meeting_Pack_v4.zip
 
 ### Early commercial/product-history artifacts
+- kleenest_v2_gps.html — early GPS/location product prototype; historical product provenance
 - kleenest_sales_ready.html
 - kleenest_v7_qr_checkins.html
 - kleenest_v8_premium_reviews.html
