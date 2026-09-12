@@ -52,6 +52,7 @@ The broader business corpus also includes founder/customer validation and opport
 - [Opportunity Readiness & Funding](./validation/opportunity-readiness-and-funding.md)
 - [37-Target Materials Manifest](./validation/target-materials-manifest.md)
 - [Independent Market / Competitive Analysis](./research/independent-market-competitive-analysis-2026-08-28.md)
+- [AGC Missouri partner-channel reference](./research/agc-missouri-emerging-provider-2026.md)
 - [Packs & Archive Manifest](./PACKS_AND_ARCHIVES.md)
 
 These materials preserve Business Model Canvas work, customer hypotheses/interviews, early 12-month models, mentor questions, demo scripts, grant/angel readiness, targeted pilot packets, and external competitor analysis. Where they conflict with current v9/v10 positioning or forecasts, the current material wins.
