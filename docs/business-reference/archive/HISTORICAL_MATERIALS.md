@@ -89,3 +89,15 @@ When historical material conflicts with current v9/v10 strategy:
 - Kleenest_One_Page_Pitch_Deck.pptx — early $19–$49/month commercial framing
 - kleenest_sales_ready.html
 - QR / Premium / Business / gamification HTML prototype lineage v7–v11
+
+## Deep historical sources recovered
+
+### April 2025 Drive archive
+Seven unique early business/market documents are preserved under [2025-drive/](./2025-drive/README.md), including market analysis, market-size/TAM-SAM-SOM work, product/business-plan drafts, keyword research, and St. Louis/Chicago projections.
+
+### August 2026 strategy sources
+- [Mission & Economic Engine](./mission-and-economic-engine-2026-08-19.md) — early consumer-network/data/B2B economic thesis plus a historical app audit.
+- [Location-Intelligence & Business Platform Strategy](./platform-intelligence-business-strategy-2026-08-19.md) — normalized business-relevant material from the 106-page `Kleenest app .pdf`, covering privacy-aware location intelligence, commercial metrics, Business/Fleet/Enterprise/API products, benchmarking, advertising sequencing, and the Location Truth / Intelligence Plane concept.
+
+### Important rule
+These sources preserve strategic evolution. They do not override current v9/v10 pricing, forecasts, live product state, or current Architecture contracts.
