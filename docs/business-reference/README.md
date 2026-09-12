@@ -40,3 +40,18 @@ Earlier v3-v8 business plans, decks, models, outreach plans, pilot decks, and me
 5. Do not copy private contact data or confidential correspondence into public-facing material without review.
 
 _Last consolidated: September 11, 2026._
+
+
+## Validation, workshops & readiness
+
+The broader business corpus also includes founder/customer validation and opportunity-readiness work:
+
+- [SQ1 Founder Prep v1](./validation/sq1-founder-prep-v1.md)
+- [St. Louis Pilot Outreach v1](./validation/stl-pilot-outreach-v1.md)
+- [Skandalaris Workshop Pack](./validation/skandalaris-workshop-pack.md)
+- [Opportunity Readiness & Funding](./validation/opportunity-readiness-and-funding.md)
+- [37-Target Materials Manifest](./validation/target-materials-manifest.md)
+- [Independent Market / Competitive Analysis](./research/independent-market-competitive-analysis-2026-08-28.md)
+- [Packs & Archive Manifest](./PACKS_AND_ARCHIVES.md)
+
+These materials preserve Business Model Canvas work, customer hypotheses/interviews, early 12-month models, mentor questions, demo scripts, grant/angel readiness, targeted pilot packets, and external competitor analysis. Where they conflict with current v9/v10 positioning or forecasts, the current material wins.
