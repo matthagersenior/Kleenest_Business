@@ -68,3 +68,18 @@ For every Business implementation wave:
 ## Business reference library
 
 Business, market, financial, pitch, research, pilot, outreach, and partner-reference material is consolidated under [`docs/business-reference/`](./docs/business-reference/README.md). The reference library separates current v9/v10 strategy from historical versions and does not replace the canonical product/service contracts in `Kleenest_Architecture/main`.
+
+
+## Business data room
+
+The operational business data room is at [`docs/data-room/`](./docs/data-room/README.md).
+
+Use it when preparing:
+- investor / grant / mentor diligence,
+- pilot-partner meetings,
+- fundraising readiness,
+- current-vs-historical source decisions,
+- target-specific outreach packets,
+- company diligence checklists.
+
+The data room points to the source-preserving [`docs/business-reference/`](./docs/business-reference/README.md) corpus and enforces version/claim precedence so historical forecasts, imported location counts, or outreach interest are not accidentally presented as current traction.
