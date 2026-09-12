@@ -71,3 +71,9 @@ The exhaustive audit also recovered older strategy that predates the versioned 2
 - [Mission & Economic Engine — August 2026](./archive/mission-and-economic-engine-2026-08-19.md)
 - [Location-Intelligence & Business Platform Strategy — August 2026](./archive/platform-intelligence-business-strategy-2026-08-19.md)
 - [Deep Audit Report](./DEEP_AUDIT_2026-09-11.md)
+
+
+## Source integrity and detailed targets
+
+- [Source Integrity Manifest](./SOURCE_INTEGRITY.md) records byte-level SHA-256 checksums for audited current files and major source bundles.
+- [37-Target Searchable Intelligence](./targets/README.md) expands the upgraded target pack into repository-searchable target-specific strategy.
