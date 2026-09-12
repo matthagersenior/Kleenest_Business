@@ -56,3 +56,10 @@ The broader business corpus also includes founder/customer validation and opport
 - [Packs & Archive Manifest](./PACKS_AND_ARCHIVES.md)
 
 These materials preserve Business Model Canvas work, customer hypotheses/interviews, early 12-month models, mentor questions, demo scripts, grant/angel readiness, targeted pilot packets, and external competitor analysis. Where they conflict with current v9/v10 positioning or forecasts, the current material wins.
+
+
+## Operational data room
+
+For audience-specific diligence and current-use navigation, start with the [Kleenest Business Data Room](../data-room/README.md).
+
+The reference library preserves source history; the data room determines what should be used now.
