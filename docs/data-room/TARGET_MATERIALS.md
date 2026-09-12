@@ -71,3 +71,8 @@ For each target, maintain:
 Do not reuse a generic deck where a target-specific one exists.
 
 If the target's status materially changes, update the brief and meeting prep before the next interaction.
+
+
+## Searchable target intelligence
+
+The source pack has also been normalized into four detailed searchable pages under [business-reference/targets](../business-reference/targets/README.md). Use those pages to prepare target-specific meetings, then verify current roles/facts immediately before outreach.
