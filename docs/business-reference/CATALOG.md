@@ -185,3 +185,9 @@ See [SOURCE_LINKS.md](./SOURCE_LINKS.md) for durable Drive URLs.
 - `Kleenest_Architecture/docs/kleenest-independent-interoperability-matrix-2026-08-28.md` — external competitor/market review preserved as a normalized research reference.
 - `Kleenest_App/docs/sq1-founder-prep.md` — original BMC/hypotheses/interviews/model/demo preparation, copied into validation.
 - `Kleenest_App/docs/stl-pilot-outreach.md` — original St. Louis pilot/Arch Grants/angel-readiness outreach source, copied into validation.
+
+
+## External partner/channel attachment discovered in Gmail
+
+- **AGC of Missouri — Emerging Supplier / Service Provider 2026** (`MemberApp_EmergingSupplierServiceProvider2026.pdf`) — membership/channel document received during Kleenest outreach; normalized at [research/agc-missouri-emerging-provider-2026.md](./research/agc-missouri-emerging-provider-2026.md).
+- Gmail attachment sweep found 74 Kleenest-related attachment-bearing messages; the only other recurring substantive Kleenest attachments were `Kleenest_STL_Pilot_Deck_fixed_v2.pdf` and `Kleenest_Business_Plan_Executive_Summary_v6.pdf`, already represented in this catalog.
