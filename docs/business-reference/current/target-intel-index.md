@@ -81,3 +81,15 @@ Assumption identified → interview/pilot test → evidence collected → metric
 ## Reference rule
 
 This file intentionally omits private email addresses and confidential correspondence. Use the source dossiers/trackers for approved internal outreach execution; use this repository copy for strategy and product/business context.
+
+
+## Detailed searchable target set
+
+The upgraded 37-target pack is now normalized into searchable target pages:
+
+- [Targets 01–10](../targets/targets-01-10.md)
+- [Targets 11–20](../targets/targets-11-20.md)
+- [Targets 21–30](../targets/targets-21-30.md)
+- [Targets 31–37](../targets/targets-31-37.md)
+
+These pages preserve the source pack's target intelligence, recommended pilot/ask, value proposition, business-plan fit, objections/risks, KPIs and loop to demonstrate.
