@@ -108,3 +108,59 @@ Contains:
 ## Deduplication rule
 
 A pack may contain the same artifact that also exists individually in the Library. Treat the individually named highest-version artifact as the preferred source unless file comparison proves a pack contains a newer revision.
+
+## Updated Everything v9
+
+**Kleenest_Updated_Everything_v9.zip** — 15 files discovered in the deep audit:
+- Business Plan Executive Summary v9 — DOCX/PDF
+- Detailed Business Plan v9 — DOCX/PDF
+- Specific Outreach Plan v9 — DOCX/PDF
+- Meeting Playbook v9 — DOCX/PDF
+- Detailed Financial Model v9 — XLSX
+- Cortex SQ1 Materials v9 — PPTX/PDF
+- Four Seasons Specific Offer v10 — PPTX/PDF
+- nested `Kleenest_Four_Seasons_Specific_Offer_v10.zip`
+- `Kleenest_Four_Seasons_Corrected_QR_Card_v10.png`
+
+## Four Seasons Specific Offer v10 pack
+
+**Kleenest_Four_Seasons_Specific_Offer_v10.zip** — 4 files:
+- Specific Offer v10 PPTX
+- Specific Offer v10 PDF
+- Corrected QR Card v10 PNG
+- conceptual QR PNG
+
+## Four Seasons Custom Value Pack v9
+
+**Kleenest_Four_Seasons_Custom_Value_Pack_v9.zip** — 8 files:
+- Value Proposal v9 PPTX/PDF
+- Value Model v9 XLSX
+- Concept QR PNG
+- QR Placard Concept PNG
+- hospitality/lobby-restroom concept image
+- `fs_v9_montage.png`
+- Value Model v9 QA PNG
+
+## Updated Cortex / Four Seasons Materials v8
+
+**Kleenest_Updated_Cortex_Four_Seasons_Materials_v8.zip** — 12 files, combining Cortex SQ1 v8, Four Seasons v8, v8 meeting playbook, QR concepts, and v7 financial/business/outreach sources.
+
+## Updated Everything v7
+
+**Kleenest_Updated_Everything_v7.zip** — 9 files:
+- v7 Executive Summary DOCX/PDF
+- v7 Detailed Business Plan DOCX/PDF
+- v7 Specific Outreach Plan DOCX/PDF
+- v7 Financial Projections XLSX
+- Four Seasons QR Placard Concept PNG
+- Four Seasons Concept QR PNG
+
+## Updated Business Plan / Financials / Outreach v7
+
+**Kleenest_Updated_Business_Plan_Financials_Outreach_v7.zip** — 6 files:
+- v7 Executive Summary DOCX
+- v7 Detailed Business Plan DOCX
+- v7 Specific Outreach Plan DOCX
+- v7 Financial Projections XLSX
+- Four Seasons QR Placard Concept PNG
+- Four Seasons Concept QR PNG
