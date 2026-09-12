@@ -61,3 +61,21 @@ Charts made for external decks should:
 - Kleenest_Outreach_Workbook_QA_v6.png
 
 Presentation/export page and slide PNGs also exist in the Library. Treat those as derivative previews of their source deck/report rather than separate canonical business documents.
+
+### Deep-audit visual additions
+
+#### Four Seasons
+- `Kleenest_Four_Seasons_Corrected_QR_Card_v10.png`
+- `Kleenest_Four_Seasons_Value_Model_v9_QA.png`
+- `fs_v9_montage.png`
+- `a_luxurious_warmly_lit_interior_lobby_bathroom_en.png` — concept scene inside the v9 custom value pack
+
+#### Cortex / outreach / finance QA
+- `cortex_v8_montage.png`
+- `montage_v7_outreach.png`
+- `Kleenest_v7_Financial_Dashboard_QA.png`
+- `Kleenest_v7_Enterprise_Pricing_QA.png`
+- `montage_v6_outreach.png`
+- `kleenest_pilot_montage.png`
+
+These are derivative/QA/support visuals unless a current plan explicitly promotes them to a canonical external asset.
