@@ -125,3 +125,63 @@ See [SOURCE_LINKS.md](./SOURCE_LINKS.md) for durable Drive URLs.
 - Keep older versions as historical evidence.
 - Keep one preferred copy for exact duplicates; list alternates here for provenance.
 - Do not silently overwrite a source artifact with a normalized Markdown representation.
+
+
+## Second-sweep discoveries
+
+### Workshop / founder validation
+- 00_Kleenest_Target_Briefs_Index.pdf
+- 01_Skandalaris_Strategy_Brief.pdf
+- 02_Idea_Validation_Workshop_Sheet.pdf
+- 03_Marketing_Workshop_Sheet.pdf
+- 04_STL_in_Motion_Networking_Sheet.pdf
+- 05_Value_Proposition_Workshop_Sheet.pdf
+- Kleenest_Skandalaris_Action_Pack.zip
+- Kleenest_SQ1_Founder_Prep.xlsx
+- Kleenest_SQ1_Appointment_README.txt
+- Kleenest_SQ1_Appointment_Pack.zip
+- Kleenest_Opportunity_Readiness_Playbook.docx
+- Kleenest_Opportunity_Command_Center.xlsx
+
+### Target-specific material packs
+- Kleenest_Individual_Target_Packets.zip — index + 35 individual target briefs
+- Kleenest_Upgraded_Target_Materials_Pack.zip — 116 files: 37 one-page briefs + 37 needs/resolution sheets + 37 tailored loop decks + 5 masters
+- Kleenest_Outreach_Target_Materials.zip
+- Kleenest_Target_Material_Matrix.csv (inside outreach pack)
+- Kleenest_High_Priority_Target_Loop_Deck.pptx
+- Kleenest_Target_Business_Plan_Excerpts.pdf
+- Kleenest_35_Target_Intel_Materials_Manual.pdf
+
+### Additional pitch / pilot assets
+- Kleenest_One_Page_Pitch_Deck.pptx
+- Kleenest_STL_Pilot_Deck_fixed_v2.pptx
+- Kleenest_STL_Pilot_Deck_fixed_v2.pdf
+- Kleenest_STL_Pilot_Outreach_Tracker.xlsx
+- Kleenest_Partner_Meeting_Brief.pdf
+
+### Additional versioned source variants
+- Kleenest_Detailed_Financial_Model_v8.xlsx
+- Kleenest_Four_Seasons_Specific_Offer_v10.pptx
+- Kleenest_Four_Seasons_Materials_v8.pptx
+- Kleenest_Cortex_SQ1_Prep_v4.pptx / .pdf
+- Kleenest_Four_Seasons_Pilot_v4.pptx / .pdf
+- Kleenest_Outreach_Workbook_QA_v6.png
+
+### Pack archives
+- Kleenest_All_New_Everything_v3.zip
+- Kleenest_New_Business_Plans_v5.zip
+- Kleenest_Redone_Plan_and_Outreach_v6.zip
+- Kleenest_Consumer_First_Meeting_Pack_v4.zip
+
+### Early commercial/product-history artifacts
+- kleenest_sales_ready.html
+- kleenest_v7_qr_checkins.html
+- kleenest_v8_premium_reviews.html
+- kleenest_v9_business_qr_customization.html
+- kleenest_v10_qr_analytics.html
+- kleenest_v11_gamification_contests.html
+
+### Independent market analysis from GitHub
+- `Kleenest_Architecture/docs/kleenest-independent-interoperability-matrix-2026-08-28.md` — external competitor/market review preserved as a normalized research reference.
+- `Kleenest_App/docs/sq1-founder-prep.md` — original BMC/hypotheses/interviews/model/demo preparation, copied into validation.
+- `Kleenest_App/docs/stl-pilot-outreach.md` — original St. Louis pilot/Arch Grants/angel-readiness outreach source, copied into validation.
