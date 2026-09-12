@@ -58,3 +58,34 @@ When historical material conflicts with current v9/v10 strategy:
 1. preserve the historical artifact,
 2. use current material for pricing/forecast/positioning,
 3. flag the conflict rather than silently merging assumptions.
+
+
+## Additional variants and bundles found in second sweep
+
+### v8
+- Kleenest_Detailed_Financial_Model_v8.xlsx
+- Kleenest_Four_Seasons_Materials_v8.pptx (in addition to PDF/Drive Slides source)
+
+### v6
+- Kleenest_Detailed_Business_Plan_v6.pdf
+- Kleenest_Specific_Outreach_Plan_v6.pdf
+- Kleenest_Outreach_Workbook_QA_v6.png
+- Kleenest_Redone_Plan_and_Outreach_v6.zip
+
+### v5
+- Kleenest_New_Business_Plans_v5.zip
+
+### v4
+- Kleenest_Cortex_SQ1_Prep_v4.pptx / .pdf
+- Kleenest_Four_Seasons_Pilot_v4.pptx / .pdf
+- Kleenest_Four_Seasons_Concept_QR.png
+- Kleenest_Four_Seasons_QR_Placard_Concept.png
+- Kleenest_Consumer_First_Meeting_Pack_v4.zip
+
+### v3
+- Kleenest_All_New_Everything_v3.zip
+
+### pre-versioned / early sales
+- Kleenest_One_Page_Pitch_Deck.pptx — early $19–$49/month commercial framing
+- kleenest_sales_ready.html
+- QR / Premium / Business / gamification HTML prototype lineage v7–v11
