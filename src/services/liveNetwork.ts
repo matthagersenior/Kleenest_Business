@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
-import { Platform } from 'react-native';
+import { Linking,Platform } from 'react-native';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export const BUSINESS_GEOFENCE_TASK='kleenest-business-live-network-geofence';
@@ -58,6 +58,10 @@ export async function getLiveNetworkStatus(){
   return {foreground:foreground.status,background:background.status,services,registered};
 }
 
+export async function openLiveNetworkLocationSettings(){
+  await Linking.openSettings();
+}
+
 export async function registerLiveNetworkPush(){
   const permission=await Notifications.requestPermissionsAsync();
   if(permission.status!=='granted')throw new Error('Notification permission is required for Live Network alerts.');
@@ -73,8 +77,9 @@ export async function registerLiveNetworkPush(){
 export async function enableLiveNetwork(businessId:string){
   const foreground=await Location.requestForegroundPermissionsAsync();
   if(foreground.status!=='granted')throw new Error('Precise location permission is required to enable Live Network geofences.');
-  const background=await Location.requestBackgroundPermissionsAsync();
-  if(background.status!=='granted')throw new Error('Background location permission is required for Live Network alerts when Business is not open.');
+  let background=await Location.getBackgroundPermissionsAsync();
+  if(background.status!=='granted'&&Platform.OS!=='android')background=await Location.requestBackgroundPermissionsAsync();
+  if(background.status!=='granted')throw new Error('Background location is off. Open Kleenest Business location settings, choose Allow all the time, return to the app, then enable Live Network again.');
   await ensureLiveNetworkGeofences(businessId);
   const manifest=await listLiveNetworkManifest(businessId);
   if(!manifest.length)throw new Error('No active Business locations with coordinates are available for Live Network yet.');
