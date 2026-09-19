@@ -3,13 +3,13 @@ import { ActivityIndicator,Linking,Pressable,RefreshControl,ScrollView,Text,View
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 import { getBusinessTierCapabilities,tierLabel } from '@/domain/businessTiers';
 
-type BusinessRoute='/auth'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-designer'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/live-network'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
+type BusinessRoute='/auth'|'/start'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-designer'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/live-network'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
 function readNumber(source:Record<string,unknown>|null,key:string,fallback=0){const value=source?.[key];return typeof value==='number'&&Number.isFinite(value)?value:fallback}
 
 export default function BusinessHome(){
  const{loading,refreshing,error,workspace,workspaces,access,entitlement,dashboard,refresh,selectWorkspace}=useBusinessWorkspace();
  if(loading)return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}><ActivityIndicator size="large"/></View>;
- if(error||!workspace||!access)return <View style={{flex:1,padding:24,justifyContent:'center',gap:14}}><Text style={title}>Business access required</Text><Text style={muted}>{error??'No authorized Business workspace was resolved.'}</Text><View style={row}><Link href="/auth" replace asChild><Action label="Sign in"/></Link><Pressable onPress={refresh} style={secondary}><Text style={secondaryText}>Retry</Text></Pressable></View></View>;
+ if(error||!workspace||!access)return <View style={{flex:1,padding:24,justifyContent:'center',gap:14}}><Text style={title}>Start with your free location claim</Text><Text style={muted}>Sign in, enter your business name once if needed, then go straight to the existing Kleenest location search. No plan or payment is required before verification.</Text><View style={row}><Link href="/auth" replace asChild><Action label="Sign in or create account"/></Link><Link href="/start" replace asChild><Action label="Continue free claim"/></Link><Pressable onPress={refresh} style={secondary}><Text style={secondaryText}>Retry</Text></Pressable></View></View>;
  const caps=getBusinessTierCapabilities(access,entitlement),plan=tierLabel(access,entitlement);
  const metrics=[['Locations',access.location_count],['Reviews',readNumber(dashboard,'reviews')],['Check-ins',readNumber(dashboard,'check_ins')],['Redemptions',readNumber(dashboard,'redemptions')]] as const;
  return <ScrollView contentInsetAdjustmentBehavior="automatic" refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>} contentContainerStyle={{padding:16,paddingBottom:72,gap:16}}>
