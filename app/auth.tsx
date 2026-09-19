@@ -22,6 +22,7 @@ export default function BusinessAuthScreen(){
  async function signOut(){setBusy(true);try{await signOutBusiness();await refresh();router.replace('/');}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
  return <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{padding:20,gap:14,paddingBottom:48}}>
   <View style={{backgroundColor:'#173f2d',borderRadius:20,padding:18,gap:6}}><Text style={{color:'#c8ead7',fontWeight:'800'}}>BUSINESS AUTHENTICATION</Text><Text style={{color:'white',fontSize:24,fontWeight:'800'}}>Sign in to Kleenest Business</Text><Text style={{color:'#dce9e2'}}>Your Supabase session resolves the Business workspaces, roles and capabilities you are authorized to use.</Text></View>
+  <View style={claimCard}><Text style={claimKicker}>FREE LOCATION CLAIM</Text><Text style={claimTitle}>Claim your business location for free</Text><Text style={claimBody}>No subscription or payment is required to claim an existing Kleenest location. Sign in with the account you want associated with the business, then search for your location and submit the claim.</Text></View>
   {error?<Text style={{color:'#9b2c2c'}}>{error}</Text>:null}
   <Pressable disabled={busy} onPress={google} style={[button,{backgroundColor:'white',borderWidth:1,borderColor:'#cbd9d0'}]}><Text style={{fontWeight:'900',color:'#173f2d'}}>Continue with Google</Text></Pressable>
   <View style={{gap:6}}><Text style={label}>Business email</Text><TextInput value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" textContentType="emailAddress" placeholder="Business email" placeholderTextColor="#7f8d85" style={input}/></View>
@@ -30,6 +31,10 @@ export default function BusinessAuthScreen(){
   <Pressable disabled={busy} onPress={signOut} style={[button,{backgroundColor:'#edf3ef'}]}><Text style={{fontWeight:'800',color:'#244d39'}}>Sign out current session</Text></Pressable>
  </ScrollView>;
 }
+const claimCard={backgroundColor:'#eaf5ee' as const,borderRadius:18,padding:16,gap:6,borderWidth:1,borderColor:'#cfe4d6' as const};
+const claimKicker={fontSize:10,fontWeight:'900' as const,letterSpacing:1.2,color:'#356246' as const};
+const claimTitle={fontSize:21,fontWeight:'900' as const,color:'#173f2d' as const};
+const claimBody={color:'#4e6658' as const,lineHeight:20};
 const label={fontSize:13,fontWeight:'800' as const,color:'#244d39'};
 const input={backgroundColor:'white' as const,borderWidth:1,borderColor:'#dce4df',borderRadius:14,padding:14,fontSize:16,color:'#111827'};
 const passwordRow={flexDirection:'row' as const,alignItems:'stretch' as const,backgroundColor:'white' as const,borderWidth:1,borderColor:'#dce4df',borderRadius:14,overflow:'hidden' as const};
