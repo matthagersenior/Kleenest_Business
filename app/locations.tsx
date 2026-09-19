@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, RefreshControl, ScrollView, Text, TextInput, View } from 'react-native';
 import { createBusinessLocation, listBusinessLocations, listBusinessMedia, listLocationAmenities, setBusinessLocationActive, setLocationAmenity, updateBusinessLocation, type BusinessAmenity, type BusinessLocation, type BusinessMedia } from '@/services/business';
 import { deleteBusinessLocationPhoto, getBusinessLocationPhotoUrl, pickAndUploadBusinessLocationPhoto, setFeaturedBusinessLocationPhoto } from '@/services/media';
@@ -16,6 +16,7 @@ export default function Screen() {
   const [editing, setEditing] = useState<BusinessLocation | null>(null);
   const [amenityId, setAmenityId] = useState('');
   const [mode, setMode] = useState<'managed' | 'claim'>('managed');
+  const initialModeResolved = useRef(false);
   const [claimQuery, setClaimQuery] = useState('');
   const [claimResults, setClaimResults] = useState<ClaimableLocation[]>([]);
   const [claims, setClaims] = useState<BusinessLocationClaim[]>([]);
@@ -36,6 +37,7 @@ export default function Screen() {
       nextLocations.map(async location => [location.id, await listLocationAmenities(workspace.business_id, location.id)] as const),
     );
     setLocations(nextLocations);
+    if (!initialModeResolved.current) { setMode(nextLocations.length === 0 ? 'claim' : 'managed'); initialModeResolved.current = true; }
     setMedia(nextMedia);
     setClaims(nextClaims);
     setAmenities(Object.fromEntries(nextAmenities));
@@ -121,14 +123,15 @@ export default function Screen() {
       <Text>{access?.location_limit == null ? 'Unlimited location entitlement' : `${locations.length} of ${access.location_limit} location entitlement used`}</Text>
       <View style={row}>
         <Tab label="Managed locations" active={mode === 'managed'} onPress={() => setMode('managed')} />
-        <Tab label="Find & claim existing" active={mode === 'claim'} onPress={() => setMode('claim')} />
+        <Tab label="Claim existing · free" active={mode === 'claim'} onPress={() => setMode('claim')} />
       </View>
     </View>
 
     {mode === 'claim' ? <>
       <View style={card}>
-        <Text style={title}>Find an existing Kleenest place</Text>
-        <Text style={muted}>Search by business name, brand, street address, city or state. Claiming prevents duplicate locations and preserves existing trust history.</Text>
+        <Text style={claimKicker}>FREE CLAIM</Text>
+        <Text style={title}>Claim your business location for free</Text>
+        <Text style={muted}>Search by business name, brand, street address, city or state. Claiming an existing Kleenest location does not require a subscription or payment and preserves its reviews, trust history and QR identity.</Text>
         <View style={row}>
           <TextInput value={claimQuery} onChangeText={setClaimQuery} onSubmitEditing={searchClaims} placeholder="Name, brand, address or city" style={[input, { flex: 1, minWidth: 220 }]} />
           <Button label={busy === 'claim-search' ? 'Searching…' : 'Search'} disabled={busy === 'claim-search'} onPress={searchClaims} />
@@ -147,7 +150,7 @@ export default function Screen() {
           <Text style={muted}>{[item.address, item.city, item.state, item.postal_code].filter(Boolean).join(', ') || 'Address unavailable'}</Text>
           <Text style={muted}>{item.place_type ? item.place_type.replaceAll('_', ' ') : 'Place'}{item.rating != null ? ` · ★ ${Number(item.rating).toFixed(1)} (${item.review_count ?? 0})` : ''}</Text>
           {item.latitude != null && item.longitude != null ? <Text style={muted}>{Number(item.latitude).toFixed(5)}, {Number(item.longitude).toFixed(5)}</Text> : null}
-          <Button label={approved ? 'Already managed' : waiting ? 'Claim pending' : busy === `claim:${item.id}` ? 'Requesting…' : 'Claim this location'} disabled={approved || waiting || busy === `claim:${item.id}`} onPress={() => run(`claim:${item.id}`, () => requestLocationClaim(workspace.business_id, item.id), 'Claim submitted. It will become manageable after approval.')} />
+          <Button label={approved ? 'Already managed' : waiting ? 'Claim pending' : busy === `claim:${item.id}` ? 'Requesting…' : 'Claim this location for free'} disabled={approved || waiting || busy === `claim:${item.id}`} onPress={() => run(`claim:${item.id}`, () => requestLocationClaim(workspace.business_id, item.id), 'Free claim submitted. It will become manageable after approval.')} />
         </View>;
       })}
       {claimResults.length === 0 && claimQuery.trim() ? <View style={card}><Text style={muted}>No matching unclaimed canonical locations were found. If this is a genuinely new place, use Managed locations → Add new location.</Text></View> : null}
@@ -190,6 +193,7 @@ export default function Screen() {
 const hero = { backgroundColor: '#173f2d' as const, padding: 18, borderRadius: 20, gap: 7 };
 const card = { backgroundColor: 'white' as const, padding: 15, borderRadius: 16, gap: 9 };
 const inner = { backgroundColor: '#f3f6f4' as const, borderRadius: 13, padding: 11, gap: 4 };
+const claimKicker = { fontSize: 10, fontWeight: '900' as const, letterSpacing: 1.2, color: '#356246' as const };
 const title = { fontSize: 18, fontWeight: '800' as const };
 const section = { fontWeight: '800' as const, marginTop: 4 };
 const muted = { color: '#66766e' as const, lineHeight: 19 };

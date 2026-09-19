@@ -4,7 +4,7 @@ const requireAll=(p,tokens)=>{const s=read(p);for(const t of tokens)if(!s.includ
 
 const layout=requireAll('app/_layout.tsx',['assistant','qr-studio','qr-designer','notifications','intelligence','capabilities','enterprise','enterprise-economy','live-network']);
 const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Engagement','Trust operations','Business profile','Notifications','Kleenest AI','Intelligence','Capability control plane','Enterprise command','optional Fleet handoff','Live Network','/qr-designer']);
-const locations=requireAll('app/locations.tsx',['listBusinessLocations','createBusinessLocation','updateBusinessLocation','Find & claim existing','requestLocationClaim','searchClaimableLocations','ready for map/Fleet routing']);
+const locations=requireAll('app/locations.tsx',['listBusinessLocations','createBusinessLocation','updateBusinessLocation','Claim existing · free','requestLocationClaim','searchClaimableLocations','ready for map/Fleet routing']);
 const locationClaims=requireAll('src/services/locationClaims.ts',['business_search_claimable_locations','business_list_location_claims','claim_location_for_business']);
 const reviews=requireAll('src/services/business.ts',['business_review_detail','business_reply_review']);
 const reviewEvidence=requireAll('src/services/reviews.ts',['mobile_review_evidence','mobile_location_review_evidence','mobile_review_photos_for_reviews']);
