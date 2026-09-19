@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, RefreshControl, ScrollView, Text, TextInput, View } from 'react-native';
 import { createBusinessLocation, listBusinessLocations, listBusinessMedia, listLocationAmenities, setBusinessLocationActive, setLocationAmenity, updateBusinessLocation, type BusinessAmenity, type BusinessLocation, type BusinessMedia } from '@/services/business';
@@ -8,6 +9,8 @@ import { useBusinessWorkspace } from '@/state/businessWorkspace';
 const empty = { name: '', address: '', city: '', state: '', postalCode: '', latitude: '', longitude: '', phone: '', website: '' };
 
 export default function Screen() {
+  const { q } = useLocalSearchParams<{ q?: string }>();
+  const seededClaimQuery = typeof q === 'string' ? q.trim() : '';
   const { workspace, access, refresh: refreshWorkspace } = useBusinessWorkspace();
   const [locations, setLocations] = useState<BusinessLocation[]>([]);
   const [media, setMedia] = useState<BusinessMedia[]>([]);
@@ -17,7 +20,8 @@ export default function Screen() {
   const [amenityId, setAmenityId] = useState('');
   const [mode, setMode] = useState<'managed' | 'claim'>('managed');
   const initialModeResolved = useRef(false);
-  const [claimQuery, setClaimQuery] = useState('');
+  const [claimQuery, setClaimQuery] = useState(seededClaimQuery);
+  const seededClaimSearched = useRef(false);
   const [claimResults, setClaimResults] = useState<ClaimableLocation[]>([]);
   const [claims, setClaims] = useState<BusinessLocationClaim[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
@@ -38,10 +42,14 @@ export default function Screen() {
     );
     setLocations(nextLocations);
     if (!initialModeResolved.current) { setMode(nextLocations.length === 0 ? 'claim' : 'managed'); initialModeResolved.current = true; }
+    if (!seededClaimSearched.current && nextLocations.length === 0 && seededClaimQuery) {
+      seededClaimSearched.current = true;
+      setClaimResults(await searchClaimableLocations(workspace.business_id, seededClaimQuery, 50));
+    }
     setMedia(nextMedia);
     setClaims(nextClaims);
     setAmenities(Object.fromEntries(nextAmenities));
-  }, [workspace]);
+  }, [workspace, seededClaimQuery]);
 
   useEffect(() => {
     setLoading(true);
