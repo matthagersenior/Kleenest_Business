@@ -9,6 +9,14 @@ export async function signInBusiness(email: string, password: string) {
   return data.session;
 }
 
+
+export async function createBusinessAccount(email: string, password: string) {
+  const { data, error } = await client().auth.signUp({ email: email.trim(), password });
+  if (error) throw new Error(error.message);
+  if (!data.user) throw new Error('Business account creation did not return a user.');
+  return { user: data.user, session: data.session };
+}
+
 export async function signOutBusiness() {
   const { error } = await client().auth.signOut();
   if (error) throw new Error(error.message);
