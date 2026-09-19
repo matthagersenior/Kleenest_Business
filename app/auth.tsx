@@ -3,7 +3,8 @@ import { router } from 'expo-router';
 import { useEffect,useState } from 'react';
 import { Pressable,ScrollView,Text,TextInput,View } from 'react-native';
 import { getSupabaseClient } from '@/lib/supabase';
-import { signInBusiness,signOutBusiness } from '@/services/auth';
+import { createBusinessAccount,signInBusiness,signOutBusiness } from '@/services/auth';
+import { listBusinessWorkspaces } from '@/services/business';
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 
 const googleRedirect=Linking.createURL('auth',{scheme:'kleenest-business'});
@@ -15,19 +16,23 @@ export default function BusinessAuthScreen(){
  const [showPassword,setShowPassword]=useState(false);
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState<string|null>(null);
- async function finishGoogle(url:string|null){if(!url)return false;const parsed=Linking.parse(url);const code=typeof parsed.queryParams?.code==='string'?parsed.queryParams.code:'';if(!code)return false;setBusy(true);setError(null);try{const {error:exchangeError}=await getSupabaseClient().auth.exchangeCodeForSession(code);if(exchangeError)throw exchangeError;await refresh();router.replace('/');return true;}catch(c){await getSupabaseClient().auth.signOut({scope:'local'});setError(c instanceof Error?c.message:String(c));return false;}finally{setBusy(false);}}
+ const [notice,setNotice]=useState<string|null>(null);
+ async function finishBusinessEntry(){const workspaces=await listBusinessWorkspaces(true);if(!workspaces.length){router.replace('/start');return;}await refresh();router.replace('/');}
+ async function finishGoogle(url:string|null){if(!url)return false;const parsed=Linking.parse(url);const code=typeof parsed.queryParams?.code==='string'?parsed.queryParams.code:'';if(!code)return false;setBusy(true);setError(null);setNotice(null);try{const {error:exchangeError}=await getSupabaseClient().auth.exchangeCodeForSession(code);if(exchangeError)throw exchangeError;await finishBusinessEntry();return true;}catch(c){await getSupabaseClient().auth.signOut({scope:'local'});setError(c instanceof Error?c.message:String(c));return false;}finally{setBusy(false);}}
  useEffect(()=>{void Linking.getInitialURL().then(finishGoogle);const sub=Linking.addEventListener('url',event=>{void finishGoogle(event.url)});return()=>sub.remove();},[]);
- async function signIn(){if(!email.trim()||!password)return;setBusy(true);setError(null);try{await signInBusiness(email,password);await refresh();router.replace('/');}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
- async function google(){if(busy)return;setBusy(true);setError(null);try{const {data,error:authError}=await getSupabaseClient().auth.signInWithOAuth({provider:'google',options:{redirectTo:googleRedirect,skipBrowserRedirect:true}});if(authError)throw authError;if(!data.url)throw new Error('Google sign-in did not return an authorization URL.');await Linking.openURL(data.url);}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
+ async function signIn(){if(!email.trim()||!password)return;setBusy(true);setError(null);setNotice(null);try{await signInBusiness(email,password);await finishBusinessEntry();}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
+ async function createAccount(){if(!email.trim()||!password)return;setBusy(true);setError(null);setNotice(null);try{const result=await createBusinessAccount(email,password);if(result.session){await finishBusinessEntry();return;}setNotice('Account created. Check your email to confirm it, then return here and sign in to continue your free location claim.');}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
+ async function google(){if(busy)return;setBusy(true);setError(null);setNotice(null);try{const {data,error:authError}=await getSupabaseClient().auth.signInWithOAuth({provider:'google',options:{redirectTo:googleRedirect,skipBrowserRedirect:true}});if(authError)throw authError;if(!data.url)throw new Error('Google sign-in did not return an authorization URL.');await Linking.openURL(data.url);}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
  async function signOut(){setBusy(true);try{await signOutBusiness();await refresh();router.replace('/');}catch(c){setError(c instanceof Error?c.message:String(c));}finally{setBusy(false);}}
  return <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{padding:20,gap:14,paddingBottom:48}}>
   <View style={{backgroundColor:'#173f2d',borderRadius:20,padding:18,gap:6}}><Text style={{color:'#c8ead7',fontWeight:'800'}}>BUSINESS AUTHENTICATION</Text><Text style={{color:'white',fontSize:24,fontWeight:'800'}}>Sign in to Kleenest Business</Text><Text style={{color:'#dce9e2'}}>Your Supabase session resolves the Business workspaces, roles and capabilities you are authorized to use.</Text></View>
   <View style={claimCard}><Text style={claimKicker}>FREE LOCATION CLAIM</Text><Text style={claimTitle}>Claim your business location for free</Text><Text style={claimBody}>No subscription or payment is required to claim an existing Kleenest location. Sign in with the account you want associated with the business, then search for your location and submit the claim.</Text></View>
   {error?<Text style={{color:'#9b2c2c'}}>{error}</Text>:null}
-  <Pressable disabled={busy} onPress={google} style={[button,{backgroundColor:'white',borderWidth:1,borderColor:'#cbd9d0'}]}><Text style={{fontWeight:'900',color:'#173f2d'}}>Continue with Google</Text></Pressable>
+  {notice?<View style={noticeCard}><Text style={{color:'#22553a',fontWeight:'700'}}>{notice}</Text></View>:null}
+  <Pressable disabled={busy} onPress={google} style={[button,{backgroundColor:'white',borderWidth:1,borderColor:'#cbd9d0'}]}><Text style={{fontWeight:'900',color:'#173f2d'}}>Continue with Google · fastest</Text></Pressable>
   <View style={{gap:6}}><Text style={label}>Business email</Text><TextInput value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" textContentType="emailAddress" placeholder="Business email" placeholderTextColor="#7f8d85" style={input}/></View>
   <View style={{gap:6}}><Text style={label}>Business password</Text><View style={passwordRow}><TextInput value={password} onChangeText={setPassword} secureTextEntry={!showPassword} autoCapitalize="none" autoCorrect={false} autoComplete="password" textContentType="password" placeholder="Business password" placeholderTextColor="#7f8d85" style={passwordInput}/><Pressable accessibilityRole="button" accessibilityLabel={showPassword?'Hide business password':'Show business password'} onPress={()=>setShowPassword(current=>!current)} style={visibilityButton}><Text style={visibilityText}>{showPassword?'Hide':'Show'}</Text></Pressable></View></View>
-  <Pressable disabled={busy||!email.trim()||!password} onPress={signIn} style={[button,{opacity:(busy||!email.trim()||!password)?0.5:1}]}><Text style={buttonText}>{busy?'Working…':'Sign in to Business'}</Text></Pressable>
+  <View style={{flexDirection:'row',flexWrap:'wrap',gap:9}}><Pressable disabled={busy||!email.trim()||!password} onPress={createAccount} style={[button,{opacity:(busy||!email.trim()||!password)?0.5:1}]}><Text style={buttonText}>{busy?'Working…':'Create account & continue'}</Text></Pressable><Pressable disabled={busy||!email.trim()||!password} onPress={signIn} style={[button,{backgroundColor:'#edf3ef',opacity:(busy||!email.trim()||!password)?0.5:1}]}><Text style={{fontWeight:'900',color:'#244d39'}}>Already have an account? Sign in</Text></Pressable></View>
   <Pressable disabled={busy} onPress={signOut} style={[button,{backgroundColor:'#edf3ef'}]}><Text style={{fontWeight:'800',color:'#244d39'}}>Sign out current session</Text></Pressable>
  </ScrollView>;
 }
@@ -35,6 +40,7 @@ const claimCard={backgroundColor:'#eaf5ee' as const,borderRadius:18,padding:16,g
 const claimKicker={fontSize:10,fontWeight:'900' as const,letterSpacing:1.2,color:'#356246' as const};
 const claimTitle={fontSize:21,fontWeight:'900' as const,color:'#173f2d' as const};
 const claimBody={color:'#4e6658' as const,lineHeight:20};
+const noticeCard={backgroundColor:'#e6f3eb' as const,borderRadius:14,padding:12};
 const label={fontSize:13,fontWeight:'800' as const,color:'#244d39'};
 const input={backgroundColor:'white' as const,borderWidth:1,borderColor:'#dce4df',borderRadius:14,padding:14,fontSize:16,color:'#111827'};
 const passwordRow={flexDirection:'row' as const,alignItems:'stretch' as const,backgroundColor:'white' as const,borderWidth:1,borderColor:'#dce4df',borderRadius:14,overflow:'hidden' as const};
