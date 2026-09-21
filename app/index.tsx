@@ -3,7 +3,7 @@ import { ActivityIndicator,Linking,Pressable,RefreshControl,ScrollView,Text,View
 import { useBusinessWorkspace } from '@/state/businessWorkspace';
 import { getBusinessTierCapabilities,tierLabel } from '@/domain/businessTiers';
 
-type BusinessRoute='/auth'|'/start'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-designer'|'/qr-studio'|'/engagement'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/live-network'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
+type BusinessRoute='/auth'|'/start'|'/assistant'|'/profile'|'/members'|'/locations'|'/reviews'|'/qr-designer'|'/qr-studio'|'/engagement'|'/advertising'|'/progression'|'/prevention'|'/trust-operations'|'/notifications'|'/live-network'|'/intelligence'|'/capabilities'|'/governance'|'/enterprise-location'|'/enterprise'|'/enterprise-economy';
 function readNumber(source:Record<string,unknown>|null,key:string,fallback=0){const value=source?.[key];return typeof value==='number'&&Number.isFinite(value)?value:fallback}
 
 export default function BusinessHome(){
@@ -28,6 +28,7 @@ export default function BusinessHome(){
     <WorkspaceCard href="/live-network" kicker="LIVE" title="Live Network" detail="Geofences, background location signals and operational notification delivery."/>
     <WorkspaceCard href="/members" kicker="PEOPLE" title="Team & roles" detail="Membership, permissions and business authority."/>
     <WorkspaceCard href="/engagement" kicker="GROW" title="Engagement" detail="Campaigns, promotions, events and customer activation."/>
+    <WorkspaceCard href="/advertising" kicker="REACH" title="Advertise" detail="Contextual sponsored placements that fit the Kleenest consumer workflow."/>
     <WorkspaceCard href="/trust-operations" kicker="OPERATE" title="Trust operations" detail="Remediation, reverification and restroom quality work."/>
   </View></View>
 
