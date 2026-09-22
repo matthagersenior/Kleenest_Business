@@ -3,7 +3,7 @@ const read=p=>fs.readFileSync(p,'utf8');
 const requireAll=(p,tokens)=>{const s=read(p);for(const t of tokens)if(!s.includes(t))throw new Error(`${p} missing functional UI contract: ${t}`);return s;};
 
 const layout=requireAll('app/_layout.tsx',['headerShown:false','Business home']);
-const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Engagement','Trust operations','Enterprise command','caps.enterpriseLocationFeatures','function Action({label,onPress}','function LightAction({label,onPress','href="/auth" replace','Claim your business location for free','Find & claim free']);
+const home=requireAll('app/index.tsx',['Your operating workspaces','Locations','Reviews & replies','QR Studio','Team & roles','Campaigns & Promotions','Trust operations','Enterprise command','caps.enterpriseLocationFeatures','function Action({label,onPress}','function LightAction({label,onPress','href="/auth" replace','Claim your business location for free','Find & claim free']);
 const auth=requireAll('app/auth.tsx',['finishBusinessEntry','createBusinessAccount','Create account & continue','Claim your business location for free','No subscription or payment is required']);
 const start=requireAll('app/start.tsx',['One quick step','Business name','createBusinessForCurrentUser',"router.replace('/locations')",'No address, payment or plan selection']);
 const locations=requireAll('app/locations.tsx',['Claim your business location for free','FREE CLAIM','Claim this location for free']);

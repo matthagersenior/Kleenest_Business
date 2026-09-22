@@ -7,7 +7,7 @@ if (configuredEasProjectId && configuredEasProjectId !== EXPECTED_EAS_PROJECT_ID
   throw new Error(`[Kleenest Business] EAS_PROJECT_ID drift detected. Expected ${EXPECTED_EAS_PROJECT_ID}, received ${configuredEasProjectId}.`);
 }
 const EAS_PROJECT_ID = configuredEasProjectId || EXPECTED_EAS_PROJECT_ID;
-const otaChannel = process.env.EXPO_PUBLIC_OTA_CHANNEL || 'business-production';
+const otaChannel = process.env.EXPO_PUBLIC_OTA_CHANNEL || 'business-legacy-preview';
 
 const config: ExpoConfig = {
   name: 'Kleenest Business',

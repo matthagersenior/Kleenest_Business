@@ -27,8 +27,8 @@ export default function BusinessHome(){
     <WorkspaceCard href="/qr-designer" kicker="ON-SITE" title="QR Studio" detail="Visual design, logos, branded appearance, scan safety, templates and stable-code QR lifecycle."/>
     <WorkspaceCard href="/live-network" kicker="LIVE" title="Live Network" detail="Geofences, background location signals and operational notification delivery."/>
     <WorkspaceCard href="/members" kicker="PEOPLE" title="Team & roles" detail="Membership, permissions and business authority."/>
-    <WorkspaceCard href="/engagement" kicker="GROW" title="Engagement" detail="Campaigns, promotions, events and customer activation."/>
-    <WorkspaceCard href="/advertising" kicker="REACH" title="Advertise" detail="Contextual sponsored placements that fit the Kleenest consumer workflow."/>
+    <WorkspaceCard href="/advertising" kicker="REACH" title="Sponsored Ads" detail="Create Kleenest Sponsored placements that fit the consumer workflow without affecting organic rank."/>
+    <WorkspaceCard href="/engagement" kicker="GROW" title="Campaigns & Promotions" detail="Create and manage campaigns, promotions, contests and events."/>
     <WorkspaceCard href="/trust-operations" kicker="OPERATE" title="Trust operations" detail="Remediation, reverification and restroom quality work."/>
   </View></View>
 
