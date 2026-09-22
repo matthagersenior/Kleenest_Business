@@ -1,22 +1,13 @@
-name: Publish Business OTA Update
+name: Publish Business Legacy Preview OTA
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'app/**'
-      - 'src/**'
-      - 'scripts/**'
-      - 'app.config.ts'
-      - 'eas.json'
-      - '.github/workflows/ota-update.yml'
 
 permissions:
   contents: read
 
 concurrency:
-  group: business-production-ota
+  group: business-legacy-preview-ota
   cancel-in-progress: true
 
 jobs:
@@ -26,7 +17,7 @@ jobs:
     env:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       EAS_PROJECT_ID: 15ac343b-81bf-459b-8c25-1b2fc8b293de
-      EXPO_PUBLIC_OTA_CHANNEL: business-production
+      EXPO_PUBLIC_OTA_CHANNEL: business-legacy-preview
       EXPO_PUBLIC_SUPABASE_URL: https://ssgesjzdvdsqacdtasje.supabase.co
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_f1rbczgvWKSQy2g9mTDQZg_K9Wv19bL
     steps:
@@ -40,14 +31,14 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Verify Expo authentication
         run: npx eas-cli@latest whoami --non-interactive
-      - name: Verify dedicated Business Expo identity
+      - name: Verify isolated legacy Business Expo identity
         run: |
           npx expo config --type public --json > expo-config.json
           node <<'NODE'
           const fs=require('fs');
           const c=JSON.parse(fs.readFileSync('expo-config.json','utf8'));
           const project='15ac343b-81bf-459b-8c25-1b2fc8b293de';
-          const channel='business-production';
+          const channel='business-legacy-preview';
           const failures=[];
           if(c.slug!=='kleenest-business')failures.push(`slug=${c.slug}`);
           if(c.extra?.eas?.projectId!==project)failures.push(`projectId=${c.extra?.eas?.projectId}`);
@@ -61,9 +52,9 @@ jobs:
         run: |
           npm run audit
           npm run typecheck
-      - name: Publish Business OTA update
-        run: npx eas-cli@latest update --channel business-production --message "Business ${GITHUB_SHA}" --non-interactive
+      - name: Publish isolated Business preview OTA
+        run: npx eas-cli@latest update --channel business-legacy-preview --message "Business ${GITHUB_SHA}" --non-interactive
       - name: Verify Business OTA is discoverable
         run: |
-          npx eas-cli@latest update:list --branch business-production --limit 1 --json --non-interactive > ota-latest.json
+          npx eas-cli@latest update:list --branch business-legacy-preview --limit 1 --json --non-interactive > ota-latest.json
           grep -q "$GITHUB_SHA" ota-latest.json
